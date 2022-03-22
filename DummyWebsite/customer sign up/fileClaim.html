@@ -8,7 +8,7 @@
   <meta name="author"
     content="Edited by: Angelo Gonzales. Original: Mark Otto, Jacob Thornton, and Bootstrap contributors">
   <meta name="generator" content="Hugo 0.88.1">
-  <title>Customer Sign Up</title>
+  <title>File Claim</title>
 
   <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/checkout/">
 
@@ -57,7 +57,7 @@
           <div class="row g-3">
             <div class="col-sm-4">
               <label for="firstName" class="form-label">First name</label>
-              <input type="text" class="form-control" id="firstName" placeholder="" value="First" readonly>
+              <input type="text" class="form-control" id="firstName" name="firstName" placeholder="" value="First" readonly>
               <div class="invalid-feedback">
                 Valid first name is required.
               </div>
@@ -65,7 +65,7 @@
 
             <div class="col-sm-4">
               <label for="middleName" class="form-label">Middle name</label>
-              <input type="text" class="form-control" id="middleName" placeholder="" value="Middle" readonly>
+              <input type="text" class="form-control" id="middleName" name="middleName" placeholder="" value="Middle" readonly>
               <div class="invalid-feedback">
                 Valid middle name is required.
               </div>
@@ -73,7 +73,7 @@
 
             <div class="col-sm-4">
               <label for="lastName" class="form-label">Last name</label>
-              <input type="text" class="form-control" id="lastName" placeholder="" value="Last" readonly>
+              <input type="text" class="form-control" id="lastName" name="lastName" placeholder="" value="Last" readonly>
               <div class="invalid-feedback">
                 Valid last name is required.
               </div>
@@ -81,14 +81,14 @@
 
             <div class="col-12">
               <label for="email" class="form-label">Email</label>
-              <input type="email" class="form-control" id="email" value="you@example.com" readonly>
+              <input type="email" class="form-control" id="email" name="email" value="you@example.com" readonly>
               <div class="invalid-feedback">
                 Please enter a valid email address.
               </div>
             </div>
             <div class="col-12">
               <label for="phone" class="form-label">Phone number</label>
-              <input type="phone" class="form-control" id="phone" value="123-456-7890" readonly>
+              <input type="phone" class="form-control" id="phone" name="phone" value="123-456-7890" readonly>
               <div class="invalid-feedback">
                 Please enter a valid phone number address.
               </div>
@@ -96,7 +96,7 @@
 
             <div class="col-6">
               <label for="policy" class="form-label">Policy</label>
-              <select class="form-select" id="type" required aria-label="select example">
+              <select class="form-select" id="policy" name="policy" required aria-label="select example">
                 <option value="">Please select the policy</option>
                 <option value="1">Policy1</option>
                 <option value="2">Policy2</option>
@@ -109,7 +109,7 @@
 
             <div class="col-6">
               <label for="type" class="form-label">Type</label>
-              <select class="form-select" id="type" required aria-label="select example">
+              <select class="form-select" id="type" name="type" required aria-label="select example">
                 <option value="">Please select the type</option>
                 <option value="1">Collision</option>
                 <option value="2">Comprehensive</option>
@@ -122,14 +122,14 @@
 
             <div class="col-6">
               <label for="filing_date" class="form-label">Filing Date</label>
-              <input type="date" class="form-control" id="filing_date" name="filing_date" required>
+              <input type="date" class="form-control" name="filing_date" id="filing_date" name="filing_date" required>
             </div>
 
             <div class="col-6"></div>
 
             <div class="col-6">
               <label for="driver" class="form-label">Driver</label>
-              <select class="form-select" id="driver" required aria-label="select example">
+              <select class="form-select" id="driver" name="driver" required aria-label="select example">
                 <option value="">Please select the driver</option>
                 <option value="1">Driver1</option>
                 <option value="2">Driver2</option>
@@ -139,8 +139,8 @@
             </div>
 
             <div class="col-12">
-              <label for="address" class="form-label">Location</label>
-              <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
+              <label for="location" class="form-label">Location</label>
+              <input type="text" class="form-control" id="location" name="location" placeholder="1234 Main St" required>
               <div class="invalid-feedback">
                 Please enter the location.
               </div>
@@ -148,7 +148,7 @@
 
             <div class="col-md-6">
               <label for="country" class="form-label">Country</label>
-              <select class="form-select" id="country" required>
+              <select class="form-select" id="country" name="country" required>
                 <option value="">Choose...</option>
                 <option>Canada</option>
               </select>
@@ -158,14 +158,19 @@
             </div>
 
             <div class="col-md-6">
-              <label for="state" class="form-label">Province/Territory</label>
-              <select class="form-select" id="province" required>
+              <label for="province" class="form-label">Province/Territory</label>
+              <select class="form-select" id="province" name="province" required>
                 <option value="">Choose...</option>
                 <option>Alberta</option>
               </select>
               <div class="invalid-feedback">
                 Please provide a valid state.
               </div>
+            </div>
+
+            <div class="col-12">
+              <label for="comments">Comments</label>
+              <textarea class="form-control" id="comments" name="comments" rows="6"></textarea>
             </div>
 
             <!-- <div class="col-md-3">
