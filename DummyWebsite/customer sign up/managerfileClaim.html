@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author"
+    content="Edited by: Angelo Gonzales. Original: Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Hugo 0.88.1">
+  <title>File Claim</title>
+
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/checkout/">
+
+
+
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+
+
+
+  <!-- Custom styles for this template -->
+  <link href="form-validation.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+  <div class="container">
+    <main>
+      <div class="py-5 text-center">
+        <h1 class="h1 mb-3 fw-bold">Easy Auto Insurance</h1>
+        <h2>File a Claim</h2>
+        <!-- <p class="lead">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p> -->
+      </div>
+
+      <div>
+        <h4 class="mb-3">Please enter customer information</h4>
+        <form class="needs-validation" novalidate>
+          <div class="col-6">
+            <label for="customerID" class="form-label">Customer ID</label>
+            <select class="form-select" id="policy" name="customerID" required aria-label="select example">
+              <option value="">Please select the customer ID</option>
+              <option value="1">123</option>
+              <option value="2">456</option>
+              <!-- <option value="2">Other</option> -->
+            </select>
+            <div class="invalid-feedback">Please select a valid customer ID</div>
+          </div>
+
+          <div class="col-6"></div>
+
+          <div class="row g-3">
+            <div class="col-sm-4">
+              <label for="firstName" class="form-label">First name</label>
+              <input type="text" class="form-control" id="firstName" name="firstName" placeholder="" value="First" readonly>
+              <div class="invalid-feedback">
+                Valid first name is required.
+              </div>
+            </div>
+
+            <div class="col-sm-4">
+              <label for="middleName" class="form-label">Middle name</label>
+              <input type="text" class="form-control" id="middleName" name="middleName" placeholder="" value="Middle" readonly>
+              <div class="invalid-feedback">
+                Valid middle name is required.
+              </div>
+            </div>
+
+            <div class="col-sm-4">
+              <label for="lastName" class="form-label">Last name</label>
+              <input type="text" class="form-control" id="lastName" name="lastName" placeholder="" value="Last" readonly>
+              <div class="invalid-feedback">
+                Valid last name is required.
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email" value="you@example.com" readonly>
+              <div class="invalid-feedback">
+                Please enter a valid email address.
+              </div>
+            </div>
+            <div class="col-12">
+              <label for="phone" class="form-label">Phone number</label>
+              <input type="phone" class="form-control" id="phone" name="phone" value="123-456-7890" readonly>
+              <div class="invalid-feedback">
+                Please enter a valid phone number address.
+              </div>
+            </div>
+
+            <div class="col-6">
+              <label for="policy" class="form-label">Policy</label>
+              <select class="form-select" id="policy" name="policy" required aria-label="select example">
+                <option value="">Please select the policy</option>
+                <option value="1">Policy1</option>
+                <option value="2">Policy2</option>
+                <!-- <option value="2">Other</option> -->
+              </select>
+              <div class="invalid-feedback">Please select a valid policy</div>
+            </div>
+
+            <div class="col-6"></div>
+
+            <div class="col-6">
+              <label for="type" class="form-label">Type</label>
+              <select class="form-select" id="type" name="type" required aria-label="select example">
+                <option value="">Please select the type</option>
+                <option value="1">Collision</option>
+                <option value="2">Comprehensive</option>
+                <option value="2">Other</option>
+              </select>
+              <div class="invalid-feedback">Please select a valid type</div>
+            </div>
+
+            <div class="col-6"></div>
+
+            <div class="col-6">
+              <label for="filing_date" class="form-label">Filing Date</label>
+              <input type="date" class="form-control" name="filing_date" id="filing_date" name="filing_date" required>
+            </div>
+
+            <div class="col-6"></div>
+
+            <div class="col-6">
+              <label for="driver" class="form-label">Driver</label>
+              <select class="form-select" id="driver" name="driver" required aria-label="select example">
+                <option value="">Please select the driver</option>
+                <option value="1">Driver1</option>
+                <option value="2">Driver2</option>
+                <option value="2">Other</option>
+              </select>
+              <div class="invalid-feedback">Please select a valid driver</div>
+            </div>
+
+            <div class="col-12">
+              <label for="location" class="form-label">Location</label>
+              <input type="text" class="form-control" id="location" name="location" placeholder="1234 Main St" required>
+              <div class="invalid-feedback">
+                Please enter the location.
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="country" class="form-label">Country</label>
+              <select class="form-select" id="country" name="country" required>
+                <option value="">Choose...</option>
+                <option>Canada</option>
+              </select>
+              <div class="invalid-feedback">
+                Please select a valid country.
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="province" class="form-label">Province/Territory</label>
+              <select class="form-select" id="province" name="province" required>
+                <option value="">Choose...</option>
+                <option>Alberta</option>
+              </select>
+              <div class="invalid-feedback">
+                Please provide a valid state.
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label for="comments">Comments</label>
+              <textarea class="form-control" id="comments" name="comments" rows="6"></textarea>
+            </div>
+
+            <!-- <div class="col-md-3">
+              <label for="zip" class="form-label">Zip</label>
+              <input type="text" class="form-control" id="zip" placeholder="" required>
+              <div class="invalid-feedback">
+                Zip code required.
+              </div>
+            </div> -->
+          </div>
+
+          <hr class="my-4">
+
+          <button class="w-100 btn btn-primary btn-lg" type="submit">File Claim</button>
+        </form>
+      </div>
+  </div>
+  </main>
+
+  <footer class="my-5 pt-5 text-muted text-center text-small">
+    <p class="mb-1">&copy; 2022–2022 Easy Auto Insurance</p>
+  </footer>
+  </div>
+
+  <script src="form-validation.js"></script>
+</body>
+
+</html>
