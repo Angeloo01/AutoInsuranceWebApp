@@ -1,3 +1,0 @@
-just an empty file for the purpose of pushing the folder to git
-
-In this folder, all our API stuff will be present.
