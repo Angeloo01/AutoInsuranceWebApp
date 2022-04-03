@@ -47,19 +47,18 @@ app.post('/api/customer/signUp', async (req, res) => {
 app.post('/api/customer/logIn', async (req, res) => {
     let sql = `SELECT Password FROM customer WHERE Email = '${req.body.email}'`;
     connection.query(sql, function (error, result) {
-        console.log(result[0].Password);
+        console.log(req.body.password);
+        bcrypt.compare(req.body.password, result[0].Password, function (err, res) {
+            if (err) {
+                console.log(err);
+            }
+            if (res) {
+                res.status(200).send();
+            } else {
+                console.log("Wrong Password");
+            }
+        });
     })
-    try {
-        if (await bcrypt.compare(req.body.password, result[0].Password)) {
-            res.send("Correct Password!");
-        }
-        else {
-            res.send("Wrong Password!");
-        }
-    }
-    catch {
-        res.status(500).send();
-    }
 });
 app.listen(3000, () => {
     console.log("Listening on port 3000")
