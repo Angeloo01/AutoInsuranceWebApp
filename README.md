@@ -1,5 +1,5 @@
 # AutoInsuranceWebApp
-The API is fully set up. Add all the endpoints in the index.js file.
+The API directory is set up for coding. Add all the endpoints in the index.js file.
 
 do res.json() to return results in JSON format from the MySQL database, this will make it easier to work with the data.
 
