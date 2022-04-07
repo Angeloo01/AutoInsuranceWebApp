@@ -26,7 +26,7 @@ CREATE TABLE CUSTOMER (
     Password		varchar(500) not null,
     Transit_No		int not null,
     Institute_No	int not null,
-    Acct_No			int not null,
+    Acct_No			bigint not null,
     primary key (CustomerNo)
 );
 
