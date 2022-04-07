@@ -62,10 +62,10 @@ f = open("data.sql", "w")
 		
 #***MANAGER***
 
-for i in range(randint(1, 1 + int(custCt * 0.01)):
+for i in range(randint(1, 1 + int(custCt * 0.01))):
 	newEntry = []
 	
-	newEntry.append((choice(fnames) + choice(lnames)).lower() + randint(0, 999999))
+	newEntry.append((choice(fnames) + choice(lnames)).lower() + str(randint(0, 999999)))
 	newEntry.append("".join(choice(string.ascii_letters) for i in range(20)))
 	
 	manager.append(newEntry)
@@ -93,7 +93,7 @@ for i in range(custCt):
 	newEntry.append(randint(1, 99999999999))
 	
 	customer.append(newEntry)
-	
+
 #***CLAIM***
 
 for i in range(randint(0, int(custCt * 0.3))):
@@ -104,7 +104,7 @@ for i in range(randint(0, int(custCt * 0.3))):
 	newEntry.append(choice(["2PARTYCOLL", "H&R", "PILEUP", "ANIMAL", "WEATHER", "VAND", "FIRE", "OBJECT"]))
 	if randint(0, 1):
 		location = choice(provs) + " Highway"
-	else
+	else:
 		cityNo = randint(0, len(cities) - 1)
 		location = cities[cityNo] + ", " + provs[cityNo]
 	newEntry.append(location)
@@ -114,29 +114,33 @@ for i in range(randint(0, int(custCt * 0.3))):
 #***POLICY***
 
 for i in range(custCt):
-	newEntry = []
-	
-	polCt = int(uniform(1, 2.2)
+	polCt = int(uniform(1, 2.2))
 	
 	for j in range(polCt):
+		newEntry = []
+		
 		newEntry.append(choice([250, 500, 1000]))
 		newEntry.append(str(randint(int(customer[i][9][0:4]) + 15, 2021)) + "-" + str(randint(1, 12)) + "-" + str(randint(1, 28)))
-		newEntry.append(choice(["ACTIVE", "CANCELLED", "LAPSED"]))
+		newEntry.append(choices(["ACTIVE", "CANCELLED", "LAPSED"], weights=[0.9, 0.05, 0.05])[0])
 		newEntry.append("null")
 		newEntry.append(i + 1)
-	
-	policy.append(newEntry)
+		
+		policy.append(newEntry)
 	
 #***PAYMENT***
 for i in range(len(policy)):
-	newEntry = []
-	
 	payCt = randint(2, 8)
 	
 	for j in range(payCt):
+		newEntry = []
 		
+		newEntry.append(i + 1)
+		newEntry.append(randint(1000000, 2000000000))
+		newEntry.append(randint(500, 10000))
+		newEntry.append(str(randint(int(policy[i][1][0:4]), 2021)) + "-" + str(randint(1, 12)) + "-" + str(randint(1, 28)))
+		
+		payment.append(newEntry)
 	
-	payment.append(newEntry)
 
 for mang in manager:
 	line = "INSERT INTO manager (Username, Password) VALUES ("
@@ -157,8 +161,14 @@ for clm in claim:
 	f.write(line[0:-2] + ");\n")
 	
 for pol in policy:
-	line = "INSERT INTO claim (Deductible, EffectiveDate, Status, Premium, CustomerNo) VALUES ("
+	line = "INSERT INTO policy (Deductible, EffectiveDate, Status, Premium, CustomerNo) VALUES ("
 	for field in pol:
+		line += "\'" + str(field) + "\', "
+	f.write(line[0:-2] + ");\n")
+	
+for pay in payment:
+	line = "INSERT INTO payment (PolicyNo, TransactionID, Amount, Date) VALUES ("
+	for field in pay:
 		line += "\'" + str(field) + "\', "
 	f.write(line[0:-2] + ");\n")
 	
