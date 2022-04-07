@@ -18,9 +18,26 @@ lnames = []
 streets = []
 edomains = ["gmail.com", "outlook.com", "yahoo.ca", "me.com", "aol.com", "hotmail.com"]
 
-manager = []
-customer = []
-claim = []
+manager = [] #No Foreign
+customer = [] #No Foreign
+claim = [] #No Foreign
+policy = []
+payment = []
+driver = [] #No Foreign, should make customers themselves drivers
+vehicle = [] #No Foreign, considerations for subclasses
+driver_for = []
+conviction = []
+drives = []
+endorsement = []
+motorcycle = []
+motorhome = []
+snow_atv_moped = []
+accessory = []
+involved_in_vehicle = []
+note = []
+reviews = []
+related_to = []
+involved_in_driver = []
 
 
 with open("cities.txt", "r") as f:
