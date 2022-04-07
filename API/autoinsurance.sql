@@ -84,7 +84,7 @@ CREATE TABLE VEHICLE (
     Uses		varchar(25) not null,
     Km_per_yr	int not null,
     Lease_status	varchar(25) not null,
-    Driving_record varchar(50) not null,
+    Driving_record varchar(50) not null
 );
 
 DROP TABLE IF EXISTS DRIVER_FOR;
@@ -219,10 +219,10 @@ CREATE TABLE INVOLVED_IN_DRIVER (
 
 DROP TABLE IF EXISTS INSD_UNDER;
 CREATE TABLE INSD_UNDER (
-	VIN 			varchar(50) not null;
-	PolicyNo		int not null;
-	foreign key (VIN) references VEHICLE(VIN)
-	foreign key (PolicyNo) references POLICY(PolicyNo)
+	VIN 			varchar(50) not null,
+	PolicyNo		int not null,
+	foreign key (VIN) references VEHICLE(VIN),
+	foreign key (PolicyNo) references POLICY(PolicyNo),
 	primary key (VIN, PolicyNo)
 );
 
