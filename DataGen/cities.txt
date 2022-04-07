@@ -46,7 +46,7 @@ Langley,BC
 Saanich,BC
 Terrebonne,QC
 Milton,ON
-St. John's,NL
+St. John\'s,NL
 Moncton,NB
 Thunder Bay,ON
 Dieppe,NB
@@ -138,7 +138,7 @@ Port Moody,BC
 Leamington,ON
 East Kelowna,BC
 Cote-Saint-Luc,QC
-Val-d'Or,QC
+Val-d\'Or,QC
 Owen Sound,ON
 Stratford,ON
 Lloydminster,SK
@@ -194,7 +194,7 @@ Wilmot,ON
 Essex,ON
 Fort St. John,BC
 Kirkland,QC
-L'Assomption,QC
+L\'Assomption,QC
 Westmount,QC
 Saint-Lazare,QC
 Chestermere,AB
@@ -243,7 +243,7 @@ Colwood,BC
 Central Saanich,BC
 Sainte-Catherine,QC
 Port Hope,ON
-L'Ancienne-Lorette,QC
+L\'Ancienne-Lorette,QC
 Saint-Basile-le-Grand,QC
 Swift Current,SK
 Edmundston,NB
@@ -353,8 +353,8 @@ St. Clements,MB
 Saint-Amable,QC
 Weyburn,SK
 South Dundas,ON
-L'Ile-Perrot,QC
-Notre-Dame-de-l'Ile-Perrot,QC
+L\'Ile-Perrot,QC
+Notre-Dame-de-l\'Ile-Perrot,QC
 Williams Lake,BC
 Elliot Lake,ON
 Cantley,QC
@@ -434,7 +434,7 @@ Kapuskasing,ON
 La Malbaie,QC
 Renfrew,ON
 Coaldale,AB
-Portugal Cove-St. Philip's,NL
+Portugal Cove-St. Philip\'s,NL
 Zorra,ON
 Kitimat,BC
 Shelburne,ON
@@ -580,7 +580,7 @@ Crowsnest Pass,AB
 Saint-Philippe,QC
 Richelieu,QC
 Notre-Dame-du-Mont-Carmel,QC
-L'Ange-Gardien,QC
+L\'Ange-Gardien,QC
 Sainte-Martine,QC
 Saint-Pie,QC
 Peachland,BC
@@ -590,7 +590,7 @@ Northern Rockies,BC
 Cookshire,QC
 West St. Paul,MB
 Windsor,QC
-L'Epiphanie,QC
+L\'Epiphanie,QC
 Creston,BC
 Smithers,BC
 Cornwall,PE
@@ -630,7 +630,7 @@ Grand Bay-Westfield,NB
 Sainte-Anne-de-Bellevue,QC
 North Huron,ON
 Oliver,BC
-Saint-Roch-de-l'Achigan,QC
+Saint-Roch-de-l\'Achigan,QC
 Stirling-Rawdon,ON
 Chisasibi,QC
 Carbonear,NL
@@ -710,7 +710,7 @@ Saint-Jacques,QC
 Swan River,MB
 Sutton,QC
 Northern Bruce Peninsula,ON
-L'Islet-sur-Mer,QC
+L\'Islet-sur-Mer,QC
 Carleton-sur-Mer,QC
 Oka,QC
 Prescott,ON
@@ -727,7 +727,7 @@ Howick,ON
 Dutton/Dunwich,ON
 Callander,ON
 Simonds,NB
-Baie-d'Urfe,QC
+Baie-d\'Urfe,QC
 New Richmond,QC
 Perth South,ON
 Roxton Pond,QC
@@ -744,7 +744,7 @@ Rossland,BC
 Mackenzie,BC
 Golden,BC
 Raymond,AB
-Saint-Adolphe-d'Howard,QC
+Saint-Adolphe-d\'Howard,QC
 Warwick,ON
 Bowen Island,BC
 Bonnechere Valley,ON
@@ -802,7 +802,7 @@ Saint-Jean-Port-Joli,QC
 East Hawkesbury,ON
 Bright,NB
 Penhold,AB
-Saint-Andre-d'Argenteuil,QC
+Saint-Andre-d\'Argenteuil,QC
 Saint-Come--Liniere,QC
 Saint-Sulpice,QC
 Marathon,ON
@@ -868,13 +868,13 @@ Saint-Gabriel-de-Valcartier,QC
 North Algona Wilberforce,ON
 Kingston,NB
 Wawa,ON
-Saint-Christophe-d'Arthabaska,QC
+Saint-Christophe-d\'Arthabaska,QC
 Sainte-Melanie,QC
 Ascot Corner,QC
 Horton,ON
 Saint-Michel,QC
 Botwood,NL
-Saint-Paul-d'Abbotsford,QC
+Saint-Paul-d\'Abbotsford,QC
 Saint-Marc-des-Carrieres,QC
 Stanstead,QC
 Sainte-Anne-de-Beaupre,QC
@@ -1024,7 +1024,7 @@ Saint-Denis,QC
 Outlook,SK
 Mitchell,MB
 Saint-Gedeon-de-Beauce,QC
-Saint-Leonard-d'Aston,QC
+Saint-Leonard-d\'Aston,QC
 Lunenburg,NS
 Northesk,NB
 Albanel,QC
@@ -1147,7 +1147,7 @@ Saint-Charles,NB
 Mattawa,ON
 Tumbler Ridge,BC
 Terrasse-Vaudreuil,QC
-L'Ascension-de-Notre-Seigneur,QC
+L\'Ascension-de-Notre-Seigneur,QC
 Bow Island,AB
 Barraute,QC
 One Hundred Mile House,BC
@@ -1176,7 +1176,7 @@ Manitouwadge,ON
 Wellington,ON
 Swift Current No. 137,SK
 Tofino,BC
-Fort Qu'Appelle,SK
+Fort Qu\'Appelle,SK
 Vulcan,AB
 Indian Head,SK
 Petit Rocher,NB
@@ -1189,10 +1189,10 @@ Les Escoumins,QC
 Richibucto,NB
 Riviere-Beaudette,QC
 Saint-Barthelemy,QC
-Nisga'a,BC
+Nisga\'a,BC
 Austin,QC
 Saint-Mathieu,QC
-Saint-Paul-de-l'Ile-aux-Noix,QC
+Saint-Paul-de-l\'Ile-aux-Noix,QC
 Orkney No. 244,SK
 Behchoko,NT
 Saint-Joseph-de-Coleraine,QC
@@ -1221,7 +1221,7 @@ Saint-Louis,NB
 Victoria,NL
 Saint-Robert,QC
 Armstrong,MB
-Saint-Pierre-de-l'Ile-d'Orleans,QC
+Saint-Pierre-de-l\'Ile-d\'Orleans,QC
 La Guadeloupe,QC
 Saint Andrews,NB
 Burns Lake,BC
@@ -1284,7 +1284,7 @@ Saint-Stanislas-de-Kostka,QC
 Frontenac,QC
 Stuartburn,MB
 Yamaska-Est,QC
-Sainte-Emelie-de-l'Energie,QC
+Sainte-Emelie-de-l\'Energie,QC
 Saint-Charles-sur-Richelieu,QC
 Saint-Joseph-de-Sorel,QC
 Nipigon,ON
@@ -1330,7 +1330,7 @@ Shellbrook No. 493,SK
 Shawville,QC
 Saint-Lucien,QC
 Lambton,QC
-Saint-Laurent-de-l'Ile-d'Orleans,QC
+Saint-Laurent-de-l\'Ile-d\'Orleans,QC
 Saint-Flavien,QC
 Grenville,QC
 Chute-aux-Outardes,QC
@@ -1389,9 +1389,9 @@ Pointe-a-la-Croix,QC
 Denmark,NB
 Saint-Joachim,QC
 Torch River No. 488,SK
-Saint-Theodore-d'Acton,QC
+Saint-Theodore-d\'Acton,QC
 Grindrod,BC
-L' Isle-Verte,QC
+L\' Isle-Verte,QC
 Harrison Hot Springs,BC
 Palmarolle,QC
 Henryville,QC
@@ -1461,9 +1461,9 @@ Weldford,NB
 Reynolds,MB
 St. Laurent,MB
 Lions Bay,BC
-L'Isle-aux-Allumettes,QC
+L\'Isle-aux-Allumettes,QC
 Emo,ON
-Sainte-Brigide-d'Iberville,QC
+Sainte-Brigide-d\'Iberville,QC
 Les Eboulements,QC
 Dunsmuir,BC
 Pointe-aux-Outardes,QC
@@ -1498,10 +1498,10 @@ Saint-Valere,QC
 Sorrento,BC
 Lameque,NB
 Thessalon,ON
-L'Isle-aux-Coudres,QC
+L\'Isle-aux-Coudres,QC
 Nobleford,AB
 Larouche,QC
-South Qu'Appelle No. 157,SK
+South Qu\'Appelle No. 157,SK
 Elton,MB
 Lorrainville,QC
 Conestogo,ON
@@ -1546,14 +1546,14 @@ Labrecque,QC
 New Bandon,NB
 Wemotaci,QC
 Sainte-Henedine,QC
-L'Anse-Saint-Jean,QC
+L\'Anse-Saint-Jean,QC
 Bassano,AB
 Parrsboro,NS
 Kaleden,BC
-St. George's,NL
+St. George\'s,NL
 Fort Simpson,NT
 Akwesasne,QC
-L'Avenir,QC
+L\'Avenir,QC
 Ignace,ON
 Claremont,ON
 Teulon,MB
@@ -1563,9 +1563,9 @@ Notre-Dame-du-Portage,QC
 St. Lawrence,NL
 Oxford,NS
 Minto-Odanah,MB
-St. Alban's,NL
+St. Alban\'s,NL
 Saint James,NB
-Saint-Norbert-d'Arthabaska,QC
+Saint-Norbert-d\'Arthabaska,QC
 Manning,AB
 Glenella-Lansdowne,MB
 Saint-Hilarion,QC
@@ -1632,7 +1632,7 @@ Hudson Bay No. 394,SK
 McKellar,ON
 Frelighsburg,QC
 Buffalo Narrows,SK
-Ayer's Cliff,QC
+Ayer\'s Cliff,QC
 Les Mechins,QC
 Sainte-Marguerite,QC
 Saint-Claude,QC
@@ -1646,7 +1646,7 @@ South Algonquin,ON
 Windermere,BC
 Saint-Narcisse-de-Beaurivage,QC
 Saint-Rene-de-Matane,QC
-Sainte-Jeanne-d'Arc,QC
+Sainte-Jeanne-d\'Arc,QC
 Plaisance,QC
 Roxton-Sud,QC
 St. Louis No. 431,SK
@@ -1672,7 +1672,7 @@ Saint-Aime-des-Lacs,QC
 Lac-Drolet,QC
 Preeceville,SK
 Maple Creek No. 111,SK
-Harbour Main-Chapel's Cove-Lakeview,NL
+Harbour Main-Chapel\'s Cove-Lakeview,NL
 Saint-Wenceslas,QC
 Weyburn No. 67,SK
 Birch Hills,SK

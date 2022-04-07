@@ -5,14 +5,22 @@ from sys import *
 from random import *
 import string
 
-custCt = int(argv[1])
+try:
+	custCt = int(argv[1])
+except:
+	print("One positive integer command line argument needs to be provided for the desired customer count")
+	quit()
+	
 cities = []
 provs = []
 fnames = []
 lnames = []
 streets = []
-customer = []
 edomains = ["gmail.com", "outlook.com", "yahoo.ca", "me.com", "aol.com", "hotmail.com"]
+
+manager = []
+customer = []
+claim = []
 
 
 with open("cities.txt", "r") as f:
@@ -39,7 +47,7 @@ for cust in range(custCt):
 	newEntry.append(choice(fnames[1000*nameSex:1000 + 1000*nameSex]))
 	newEntry.append(choice(fnames[1000*nameSex:1000 + 1000*nameSex]))
 	newEntry.append(choice(lnames))
-	cityNo = randint(0, custCt)
+	cityNo = randint(0, len(cities) - 1)
 	newEntry.append(str(randint(1, 9999)) + " " + choice(streets) + ", " + cities[cityNo])
 	newEntry.append(provs[cityNo])
 	newEntry.append("Canada")
@@ -47,8 +55,7 @@ for cust in range(custCt):
 	newEntry.append((newEntry[0][0] + newEntry[1][0] + newEntry[2]).lower() + str(randint(1, 9999)) + "@" + choice(edomains))
 	newEntry.append(["M", "F"][nameSex])
 	newEntry.append(str(randint(1950, 2006)) + "-" + str(randint(1, 12)) + "-" + str(randint(1, 28)))
-	letters = string.ascii_letters
-	newEntry.append("".join(choice(letters) for i in range(20)))
+	newEntry.append("".join(choice(string.ascii_letters) for i in range(20)))
 	newEntry.append(randint(1, 99999))
 	newEntry.append(randint(1, 999))
 	newEntry.append(randint(1, 99999999999))
