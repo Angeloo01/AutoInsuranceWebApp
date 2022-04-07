@@ -310,6 +310,135 @@ app.post('/api/driver', (req, res) => {
         });
 });
 
+//PUT method for updating a driver's information
+app.put('/api/driver', (req, res) => {
+    connection.query('UPDATE driver SET License_Date = ?, License_No = ?, License_Prov = ?, FName = ?, MName = ?, LName = ?, Training = ?, Sex = ?, Birth_Date = ?, Grid_Rating = ?, License_Class = ? WHERE License_Date = ? AND License_No = ? AND License_Prov = ?',
+        [req.body.license_date, req.body.license_no, req.body.license_prov, 
+		req.body.fname, req.body.mname, req.body.lname,
+        req.body.training, req.body.sex, req.body.birth_date, req.body.grid_rating, req.body.license_class,
+		req.body.id_license_date, req.body.id_license_no, req.body.id_license_prov],
+        (error, results, fields) => {
+            if (error) {
+                res.status(500).send();
+                console.log(error);
+                return;
+            }
+            res.status(200).send();
+        });
+});
+
+//GET method for listing all drivers on a policy or involved in a claim
+//Endpoint has been changed from blueprint, now also returns F/T party and % at fault or relationship as appropriate
+app.get('/api/driver', (req, res) => {
+	connection.query("SELECT d.License_No, d.FName, d.LName, df.Relationship FROM driver AS d, driver_for as df WHERE df.PolicyNo = ? AND d.License_No = df.License_No AND d.License_Date = df.License_Date AND d.License_Prov = df.License_Prov UNION SELECT d.License_No, d.FName, d.LName, iid.F_T_Party, iid.Percent_At_Fault FROM driver AS d, involved_in_driver AS iid WHERE iid.ClaimID = ? AND d.License_No = iid.License_No AND d.License_Date = iid.License_Date AND d.License_Prov = iid.License_Prov",
+		[req.body.PolicyNo, req.body.ClaimID]
+		(error, results, fields) => {
+			if (error) {
+				res.status(500).send();
+				console.log(error);
+				return;
+			}
+			res.json(results);
+		});
+});
+
+//GET method for listing all managers
+app.get('/api/manager', (req, res) => {
+	connection.query("SELECT ManagerID, Username FROM manager",
+		(error, results, fields) => {
+			if (error) {
+				res.status(500).send();
+				console.log(error);
+				return;
+			}
+			res.json(results);
+		});
+});
+
+//GET method for listing all payments on a policy
+app.get('/api/note', (req, res) => {
+	connection.query("SELECT TransactionID, Amount, Date FROM payment WHERE PolicyNo = ?",
+		[req.body.policyno],
+		(error, results, fields) => {
+			if (error) {
+				res.status(500).send();
+				console.log(error);
+				return;
+			}
+			res.json(results);
+		});
+});
+
+//POST method for adding a payment to a policy
+app.post('/api/payment', (req, res) => {
+	connection.query('INSERT INTO payment (PolicyNo, TransactionID, Amount, Date) VALUES (?,?,?,?)',
+		[req.body.policyno, req.body.transactionid, req.body.amount, req.body.date],
+		(error, results, fields) => {
+			if (error) {
+				res.status(500).send();
+				console.log(error);
+				return;
+			}
+			res.status(201).send();
+		});
+});
+
+//GET method for listing all notes on a policy
+app.get('/api/note', (req, res) => {
+	connection.query("SELECT Note_Title, Date, Text, ManagerID FROM note WHERE PolicyNo = ?",
+		[req.body.policyno],
+		(error, results, fields) => {
+			if (error) {
+				res.status(500).send();
+				console.log(error);
+				return;
+			}
+			res.json(results);
+		});
+});
+
+//POST method for a manager to add a note to a policy
+app.post('/api/note', (req, res) => {
+	connection.query('INSERT INTO note (PolicyNo, Note_Title, Date, Text, ManagerID) VALUES (?,?,?,?,?)',
+		[req.body.policyno, req.body.note_title, req.body.date, req.body.text, req.body.ManagerID],
+		(error, results, fields) => {
+			if (error) {
+				res.status(500).send();
+				console.log(error);
+				return;
+			}
+			res.status(201).send();
+		});
+});
+
+//GET method for listing a driver's convictions
+app.get('/api/conviction', (req, res) => {
+	connection.query("SELECT * FROM conviction WHERE License_Date = ? AND License_No = ? AND License_Prov = ?",
+		[req.body.license_date, req.body.license_no, req.body.license_prov],
+		(error, results, fields) => {
+			if (error) {
+				res.status(500).send();
+				console.log(error);
+				return;
+			}
+			res.json(results);
+		});
+});
+
+//POST method for adding a conviction for a driver
+app.post('/api/conviction', (req, res) => {
+	connection.query('INSERT INTO conviction (License_Date, License_No, License_Prov, Date, Degree) VALUES (?,?,?,?,?)',
+		[req.body.license_date, req.body.license_no, req.body.license_prov, req.body.date, req.body.degree],
+		(error, results, fields) => {
+			if (error) {
+				res.status(500).send();
+				console.log(error);
+				return;
+			}
+			res.status(201).send();
+		});
+});
+
 app.listen(3000, () => {
     console.log("Listening on port 3000")
 });
