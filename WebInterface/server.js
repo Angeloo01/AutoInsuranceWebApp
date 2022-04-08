@@ -48,6 +48,16 @@ function authManager(req, res, next) {
     return;
 }
 
+//endpoint to test authCustomer
+app.get('/tryCustomerOnly', authCustomer, (req, res) => {
+    res.send("hello customer");
+});
+
+//endpoint to test authManager
+app.get('/tryManagerOnly', authManager, (req, res) => {
+    res.send("hello manager");
+});
+
 //main page
 app.get('/', (req, res) => {
     let testData = [1, 2, 3, 4];
@@ -64,20 +74,26 @@ app.get('/signup', (req, res) => {
 });
 
 //endpoint for post new user
-app.post('/signup', (req, res) => {
+app.post('/signup', async (req, res) => {
     const {firstName, middleName, lastName, email, password, phone, sex,
             birthday, address, country, province, zip} = req.body;
-    //console.log(req.body);
-});
+    console.log(req.body);
+    
+    //call api using fetch
+    try {
+        const response = await fetch((apiURL + '/api/customer'), {
+            method: 'post',
+            body: JSON.stringify(req.body),
+            headers: { 'Content-Type': 'application/json' }
+        });
 
-//endpoint to test authCustomer
-app.get('/tryCustomerOnly', authCustomer, (req, res) => {
-    res.send("hello customer");
-});
-
-//endpoint to test authManager
-app.get('/tryManagerOnly', authManager, (req, res) => {
-    res.send("hello manager");
+        res.redirect('/');
+    }
+    //if error is returned
+    catch (error) {
+        console.log(error);
+        res.status(400).redirect('/');
+    }
 });
 
 //post method to login customer
@@ -104,7 +120,7 @@ app.post('/login', async (req, res) => {
     //if error is returned
     catch (error) {
         //console.log(error);
-        res.status(401).redirect('/');
+        res.status(401).render('front page', {'badCred': true});
     }
 
 });
@@ -113,6 +129,38 @@ app.post('/login', async (req, res) => {
 app.get('/logout', (req, res) => {
     req.session.destroy();
     res.redirect('/');
+});
+
+//view claims page for customer
+app.get('/claims', authCustomer, async (req, res) => {
+    //call api
+    try {
+        //get fetch
+        const response = await fetch(apiURL + '/api/policy/list'+`?customerno=${req.session.CustomerNo}`);
+        //convert response to json
+        const policies = await response.json();
+
+        var claims = new Array();
+        for(const curr of policies){
+            const response2 = await fetch(apiURL + '/api/claim'+`?PolicyNo=${curr.PolicyNo}`);
+            const claimRes = await response2.json();
+
+            for(const c of claimRes){
+                const response3 = await fetch(apiURL + '/api/claim/view'+`?claimno=${c.ClaimID}`);
+                const claim = await response3.json();
+                claims.push(claim);
+            }
+        };
+
+        //console.log(claims);
+
+        res.render('customerClaimView', {claims});
+    }
+    //if error is returned
+    catch (error) {
+        console.log(error);
+        res.status(400).redirect('/');
+    }
 });
 
 app.listen(8080, () => {
