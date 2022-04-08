@@ -8,7 +8,8 @@ app.use(express.json());
 var connection = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "hello12345",
+    //password: "hello12345",
+    password: "sql_password",
     database: "auto_insurance"
 });
 
@@ -33,7 +34,7 @@ app.post('/api/customer/login', async (req, res) => {
 //GET endpoint for searching for a customer
 app.get('/api/customer', (req, res) => {
     connection.query('SELECT customer.CustomerNo, customer.Fname, customer.Lname  FROM customer WHERE Fname = ? AND Lname = ? AND Addr_line = ? AND Province = ? AND Country = ? AND Phone_No = ? AND Birth_Date = ?',
-        [req.body.fname, req.body.lname, req.body.addr, req.body.prov, req.body.country, req.body.phone, req.body.bdate],
+        [req.query.fname, req.query.lname, req.query.addr, req.query.prov, req.query.country, req.query.phone, req.query.bdate],
         (error, results, fields) => {
             if (error) {
                 res.status(500).send();
@@ -59,7 +60,7 @@ app.put('/api/customer', (req, res) => {
 //GET Method to view customer's information
 app.get('/api/customer/viewInformation', (req, res) => {
     connection.query('SELECT * FROM customer WHERE CustomerNo = ?',
-        [req.body.customerno],
+        [req.query.customerno],
         (error, results, fields) => {
             if (error) {
                 res.status(500).send();
@@ -73,7 +74,7 @@ app.get('/api/customer/viewInformation', (req, res) => {
 app.post('/api/customer', async (req, res) => {
     try {
         //const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        var sql = `INSERT INTO customer (Fname, MName, LName, Addr_Line, Province, Country, Phone_No, Email, Sex, Birth_Date, Password, Transit_No, Institute_No, Acct_No) VALUES ('${req.body.fname}', '${req.body.mname}', '${req.body.lname}', '${req.body.addr}', '${req.body.province}', '${req.body.country}', '${req.body.phone}', '${req.body.email}', '${req.body.sex}', '${req.body.bdate}', '${req.body.password}', '${req.body.transitno}', '${req.body.instno}', '${req.body.instno}')`;
+        var sql = `INSERT INTO customer (Fname, MName, LName, Addr_Line, Province, Country, Phone_No, Email, Sex, Birth_Date, Password, Transit_No, Insititute_No, Acct_No) VALUES ('${req.body.firstName}', '${req.body.middleName}', '${req.body.lastName}', '${req.body.address}', '${req.body.province}', '${req.body.country}', '${req.body.phone}', '${req.body.email}', '${req.body.sex}', '${req.body.birthday}', '${req.body.password}', '${req.body.transitno}', '${req.body.instno}', '${req.body.acctno}')`;
         connection.query(sql, function (err, result) {
             if (err) {
                 res.status(500).send();
@@ -90,7 +91,7 @@ app.post('/api/customer', async (req, res) => {
 //GET Method to search for a Policy
 app.get('/api/policy', (req, res) => {
     connection.query('SELECT policy.PolicyNo, policy.EffectiveDate, policy.Status, customer.Fname, customer.Lname FROM policy JOIN customer ON (policy.CustomerNo = customer.CustomerNo) WHERE customer.Fname = ? AND customer.Lname = ? AND policy.EffectiveDate = ? AND policy.Status = ?',
-        [req.body.fname, req.body.lname, req.body.edate, req.body.status],
+        [req.query.fname, req.query.lname, req.query.edate, req.query.status],
         (error, results, fields) => {
             if (error) {
                 res.status(500).send();
@@ -116,7 +117,7 @@ app.post('/api/policy', (req, res) => {
 //GET Method to view a policy
 app.get('/api/policy/view', (req, res) => {
     connection.query('SELECT * FROM policy WHERE PolicyNo = ?',
-        [req.body.policyno],
+        [req.query.policyno],
         (error, results, fields) => {
             if (error) {
                 res.status(500).send();
@@ -129,7 +130,7 @@ app.get('/api/policy/view', (req, res) => {
 //GET Method to list all policies for a customer
 app.get('/api/policy/list', (req, res) => {
     connection.query('SELECT policy.PolicyNo, policy.EffectiveDate FROM policy JOIN customer ON (policy.CustomerNo = customer.CustomerNo) WHERE policy.CustomerNo = ?',
-        [req.body.customerno],
+        [req.query.customerno],
         (error, results, fields) => {
             if (error) {
                 res.status(500).send();
@@ -142,14 +143,14 @@ app.get('/api/policy/list', (req, res) => {
 //GET Method to view claim information
 app.get('/api/claim/view', (req, res) => {
     connection.query('SELECT * FROM claim WHERE ClaimID = ?',
-        [req.body.claimno],
+        [req.query.claimno],
         (error, results, fields) => {
             if (error) {
                 res.status(500).send();
                 console.log(error);
                 return;
             }
-            res.json(results);
+            res.json(results[0]);
         });
 })
 //POST endpoint for creating a tuple in claim table
@@ -196,13 +197,14 @@ app.put('/api/claim', (req, res) => {
 //GET endpoint for claim table to get all claims for a policy
 app.get('/api/claim', (req, res) => {
     connection.query('SELECT claim.ClaimID, claim.Accident_Date FROM claim JOIN related_to ON (claim.ClaimID = related_to.ClaimID) WHERE PolicyNo = ?',
-        [req.body.PolicyNo],
+        [req.query.PolicyNo],
         (error, results, fields) => {
             if (error) {
                 res.status(500).send();
                 console.log(error);
                 return;
             }
+            console.log(results);
             res.json(results);
         });
 });
@@ -252,7 +254,7 @@ app.put('/api/vehicle', (req, res) => {
 //GET endpoint for selecting tuples from vehicle table
 app.get('/api/vehicle', (req, res) => {
     connection.query('SELECT vehicle.VIN, Year, Make FROM vehicle JOIN involved_in_vehicle ON (vehicle.VIN = involved_in_vehicle.VIN) WHERE PolicyNo = ? AND ClaimID = ?',
-        [req.body.PolicyNo, req.body.Claim_ID],
+        [req.query.PolicyNo, req.query.Claim_ID],
         (error, results, fields) => {
             if (error) {
                 res.status(500).send();
@@ -327,7 +329,7 @@ app.put('/api/driver', (req, res) => {
 //Endpoint has been changed from blueprint, now also returns F/T party and % at fault or relationship as appropriate
 app.get('/api/driver', (req, res) => {
     connection.query("SELECT d.License_No, d.FName, d.LName, df.Relationship FROM driver AS d, driver_for as df WHERE df.PolicyNo = ? AND d.License_No = df.License_No AND d.License_Date = df.License_Date AND d.License_Prov = df.License_Prov UNION SELECT d.License_No, d.FName, d.LName, iid.F_T_Party, iid.Percent_At_Fault FROM driver AS d, involved_in_driver AS iid WHERE iid.ClaimID = ? AND d.License_No = iid.License_No AND d.License_Date = iid.License_Date AND d.License_Prov = iid.License_Prov",
-        [req.body.PolicyNo, req.body.ClaimID],
+        [req.query.PolicyNo, req.query.ClaimID],
         (error, results, fields) => {
             if (error) {
                 res.status(500).send();
@@ -352,9 +354,9 @@ app.get('/api/manager', (req, res) => {
 });
 
 //GET method for listing all payments on a policy
-app.get('/api/note', (req, res) => {
+app.get('/api/payment', (req, res) => {
     connection.query("SELECT TransactionID, Amount, Date FROM payment WHERE PolicyNo = ?",
-        [req.body.policyno],
+        [req.query.policyno],
         (error, results, fields) => {
             if (error) {
                 res.status(500).send();
@@ -382,7 +384,7 @@ app.post('/api/payment', (req, res) => {
 //GET method for listing all notes on a policy
 app.get('/api/note', (req, res) => {
     connection.query("SELECT Note_Title, Date, Text, ManagerID FROM note WHERE PolicyNo = ?",
-        [req.body.policyno],
+        [req.query.policyno],
         (error, results, fields) => {
             if (error) {
                 res.status(500).send();
@@ -410,7 +412,7 @@ app.post('/api/note', (req, res) => {
 //GET method for listing a driver's convictions
 app.get('/api/conviction', (req, res) => {
     connection.query("SELECT * FROM conviction WHERE License_Date = ? AND License_No = ? AND License_Prov = ?",
-        [req.body.license_date, req.body.license_no, req.body.license_prov],
+        [req.query.license_date, req.query.license_no, req.query.license_prov],
         (error, results, fields) => {
             if (error) {
                 res.status(500).send();

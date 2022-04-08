@@ -84,6 +84,9 @@
     <!-- <img class="mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> -->
 	<h1 class="h1 mb-3 fw-bold">Easy Auto Insurance</h1>
     <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+    <% if(typeof badCred != 'undefined') { %>
+    <div class="alert alert-danger">Invalid Email or Password</div>
+    <% } %>
 
     <div class="form-floating">
       <input type="email" class="form-control" name="email" id="floatingInput" placeholder="name@example.com">
@@ -102,10 +105,10 @@
 	
 	<div class="btn-toobar mb-3 btn-group-justified" role="toolbar" aria-label="Basic example">
 	  <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-	  <a class="btn btn-lg btn-outline-primary" href="customer sign up/signup.html">Sign Up</a>
+	  <a class="btn btn-lg btn-outline-primary" href="/signup">Sign Up</a>
 	</div>
 	
-    <a href="managerLogin.html">Manager Sign in</a>
+    <a href="/managerLogin">Manager Sign in</a>
 	<p class="mt-5 mb-3 text-muted">&copy; 2022–2022</p>
     
   </form>
