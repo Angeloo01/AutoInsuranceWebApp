@@ -73,7 +73,7 @@ app.get('/api/customer/viewInformation', (req, res) => {
 app.post('/api/customer', async (req, res) => {
     try {
         //const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        var sql = `INSERT INTO customer (Fname, MName, LName, Addr_Line, Province, Country, Phone_No, Email, Sex, Birth_Date, Password, Transit_No, Institute_No, Acct_No) VALUES ('${req.body.fname}', '${req.body.mname}', '${req.body.lname}', '${req.body.addr}', '${req.body.province}', '${req.body.country}', '${req.body.phone}', '${req.body.email}', '${req.body.sex}', '${req.body.bdate}', '${req.body.password}', '${req.body.transitno}', '${req.body.instno}', '${req.body.instno}')`;
+        var sql = `INSERT INTO customer (Fname, MName, LName, Addr_Line, Province, Country, Phone_No, Email, Sex, Birth_Date, Password, Transit_No, Institute_No, Acct_No) VALUES ('${req.body.fname}', '${req.body.mname}', '${req.body.lname}', '${req.body.addr}', '${req.body.province}', '${req.body.country}', '${req.body.phone}', '${req.body.email}', '${req.body.sex}', '${req.body.bdate}', '${req.body.password}', '${req.body.transitno}', '${req.body.instno}', '${req.body.acctno}')`;
         connection.query(sql, function (err, result) {
             if (err) {
                 res.status(500).send();
