@@ -1,8 +1,11 @@
+const apiURL = 'http://localhost:3000';
 const express = require('express');
 const app = express();
 const path = require('path');
 const session = require('express-session');
+const fetch = require('node-fetch');
 const { readdirSync } = require('fs');
+const { response } = require('express');
 
 //Setting up view engine.
 app.set('view engine', 'ejs');
@@ -19,6 +22,7 @@ app.use(session({
     rolling: true
 }));
 
+//middleware to check if customer is logged in
 function authCustomer (req, res, next) {
     if(req.session.logType){
         if(req.session.logType === 'customer') {
@@ -30,6 +34,7 @@ function authCustomer (req, res, next) {
     return;
 }
 
+//middleware to check if manager is logged in
 function authManager (req, res, next) {
     if(req.session.logType){
         if(req.session.logType === 'manager') {
@@ -41,51 +46,56 @@ function authManager (req, res, next) {
     return;
 }
 
+//main page
 app.get('/', (req, res) => {
     let testData = [1, 2, 3, 4];
     if(req.session.email){
-        res.send(`<!DOCTYPE html>
-        <html lang="en">
-        
-        <head>
-            <meta charset="UTF-8">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Home Page</title>
-        </head>
-        
-        <body>
-            <h1>Hi ${req.session.email}
-            </h1>
-            <a href="/logout">
-                <button>Logout</button>
-            </a>
-        
-        
-        </body>
-        
-        </html>`);
+        res.render('Customer Menus/CustomerMenu', {'email': req.session.email});
         return;
     }
     res.render('front page');
 });
 
+//endpoint to test authCustomer
 app.get('/tryCustomerOnly', authCustomer, (req, res) => {
     res.send("hello customer");
 });
+
+//endpoint to test authManager
 app.get('/tryManagerOnly', authManager, (req, res) => {
     res.send("hello manager");
 });
 
-//post method to login
-app.post('/login', (req, res) => {
+//post method to login customer
+//needs to be an async function to fetch
+app.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    req.session.CustNo = 0;
-    req.session.email = email;
-    req.session.logType = 'customer';
-    res.redirect('/');
+
+    //call api
+    try{
+        const response = await fetch(apiURL+'/api/customer/login', {
+            method: 'post',
+            body: JSON.stringify({email, password}),
+            headers: {'Content-Type': 'application/json'}
+        });
+        //convert response to json
+        const {CustomerNo} = await response.json()
+        
+        //sessions stuff
+        req.session.CustomerNo = CustomerNo;
+        req.session.email = email;
+        req.session.logType = 'customer';
+        res.redirect('/');
+    }
+    //if error is returned
+    catch (error){
+        //console.log(error);
+        res.status(401).redirect('/');
+    }
+    
 });
 
+//logout user
 app.get('/logout', (req, res) => {
     req.session.destroy();
     res.redirect('/');
