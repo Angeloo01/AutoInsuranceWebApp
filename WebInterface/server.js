@@ -11,6 +11,7 @@ const { response } = require('express');
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+app.use(express.static('views/Customer Menus'))
 app.use(express.urlencoded({ extended: true })) //to parse HTML form data (aka read HTML form data)
 //app.use(express.static(path.join(__dirname, '/public')));
 app.use(express.json());
@@ -23,9 +24,9 @@ app.use(session({
 }));
 
 //middleware to check if customer is logged in
-function authCustomer (req, res, next) {
-    if(req.session.logType){
-        if(req.session.logType === 'customer') {
+function authCustomer(req, res, next) {
+    if (req.session.logType) {
+        if (req.session.logType === 'customer') {
             next();
             return;
         }
@@ -35,9 +36,9 @@ function authCustomer (req, res, next) {
 }
 
 //middleware to check if manager is logged in
-function authManager (req, res, next) {
-    if(req.session.logType){
-        if(req.session.logType === 'manager') {
+function authManager(req, res, next) {
+    if (req.session.logType) {
+        if (req.session.logType === 'manager') {
             next();
             return;
         }
@@ -49,8 +50,8 @@ function authManager (req, res, next) {
 //main page
 app.get('/', (req, res) => {
     let testData = [1, 2, 3, 4];
-    if(req.session.email){
-        res.render('Customer Menus/CustomerMenu', {'email': req.session.email});
+    if (req.session.email) {
+        res.render('Customer Menus/CustomerMenu', { 'email': req.session.email });
         return;
     }
     res.render('front page');
@@ -72,15 +73,15 @@ app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     //call api
-    try{
-        const response = await fetch(apiURL+'/api/customer/login', {
+    try {
+        const response = await fetch(apiURL + '/api/customer/login', {
             method: 'post',
-            body: JSON.stringify({email, password}),
-            headers: {'Content-Type': 'application/json'}
+            body: JSON.stringify({ email, password }),
+            headers: { 'Content-Type': 'application/json' }
         });
         //convert response to json
-        const {CustomerNo} = await response.json()
-        
+        const { CustomerNo } = await response.json()
+
         //sessions stuff
         req.session.CustomerNo = CustomerNo;
         req.session.email = email;
@@ -88,11 +89,11 @@ app.post('/login', async (req, res) => {
         res.redirect('/');
     }
     //if error is returned
-    catch (error){
+    catch (error) {
         //console.log(error);
         res.status(401).redirect('/');
     }
-    
+
 });
 
 //logout user
