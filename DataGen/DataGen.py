@@ -75,7 +75,7 @@ with open("artwar.txt", "r") as f:
 			sampleNotes.append(section)
 			section = []
 		else:
-			par += line
+			par += line.partition(" ")[2]
 		
 f = open("data.sql", "w")
 		
