@@ -1,10 +1,11 @@
 #Creates an SQL file for populating the insurance database with random data
 #ver 1: customer table
-#WARNING: Intedned for an empty database, assumes autoincrement ids from 0
+#WARNING: Intended for an empty database, assumes autoincrement ids from 0
 
 from sys import *
 from random import *
 import string
+import datetime
 
 try:
 	custCt = int(argv[1])
@@ -93,23 +94,6 @@ for i in range(custCt):
 	newEntry.append(randint(1, 99999999999))
 	
 	customer.append(newEntry)
-
-#***CLAIM***
-
-for i in range(randint(0, int(custCt * 0.3))):
-	newEntry = []
-	
-	newEntry.append(str(randint(2012, 2021)) + "-" + str(randint(1, 12)) + "-" + str(randint(1, 28)))
-	newEntry.append(choice(["PENDING", "ACCEPTED", "DENIED"]))
-	newEntry.append(choice(["2PARTYCOLL", "H&R", "PILEUP", "ANIMAL", "WEATHER", "VAND", "FIRE", "OBJECT"]))
-	if randint(0, 1):
-		location = choice(provs) + " Highway"
-	else:
-		cityNo = randint(0, len(cities) - 1)
-		location = cities[cityNo] + ", " + provs[cityNo]
-	newEntry.append(location)
-	
-	claim.append(newEntry)
 	
 #***POLICY***
 
@@ -126,6 +110,32 @@ for i in range(custCt):
 		newEntry.append(i + 1)
 		
 		policy.append(newEntry)
+		
+#***CLAIM***
+
+for i in range(randint(0, int(custCt * 0.3))):
+	newEntry = []
+	
+	newEntry.append(str(randint(2012, 2021)) + "-" + str(randint(1, 12)) + "-" + str(randint(1, 28)))
+	newEntry.append(choices(["PENDING", "ACCEPTED", "DENIED"], weights=[0.8, 0.15, 0.05])[0])
+	newEntry.append(choice(["COLL", "H&R", "PILEUP", "ANIMAL", "WEATHER", "VAND", "FIRE", "OBJECT"]))
+	if randint(0, 1):
+		location = choice(provs) + " Highway"
+	else:
+		cityNo = randint(0, len(cities) - 1)
+		location = cities[cityNo] + ", " + provs[cityNo]
+	newEntry.append(location)
+	
+	claim.append(newEntry)
+	
+#***RELATED_TO***
+for i in range(len(claim)):
+	newEntry = []
+	
+	newEntry.append(randint(1, len(policy)))
+	newEntry.append(i + 1)
+	
+	related_to.append(newEntry)
 	
 #***PAYMENT***
 for i in range(len(policy)):
@@ -141,6 +151,85 @@ for i in range(len(policy)):
 		
 		payment.append(newEntry)
 	
+#***DRIVER***
+for i in range(len(policy) + len(claim)):
+	if (i < len(policy)):
+		drvCt = randint(1, 5)
+		custNo = policy[i][4]
+		licProv = customer[custNo - 1][4]
+		for dr in range(0, drvCt):
+			licNo = (str(randint(0, 999999)).rjust(3, "0") + "-" + str(randint(0, 999)).rjust(3, "0"))
+			training = choice(["Y", "N"])
+			grid_rating = randint(-15, 15)
+			license_class = randint(3, 5)
+			LName = customer[custNo - 1][2]
+			if (dr == 0):
+				bd = customer[custNo -1][9]
+				year, month, day = bd.split("-")
+				licDate = str(int(year) + 16) + "-" + month + "-" + day
+				FName = customer[custNo -1][0]
+				MName = customer[custNo -1][1]
+				sex = customer[custNo -1][8]
+				relation = "SELF"
+				
+			else:
+				year = randint(1950, 2006)
+				month = str(randint(1, 12))
+				day = str(randint(1, 28))
+				bd = str(year) + "-" + month + "-" + day
+				licDate = str(year + 16) + "-" + month + "-" + day
+				
+				nameSex = randint(0, 1)
+				FName = choice(fnames[1000*nameSex:1000 + 1000*nameSex])
+				MName = choice(fnames[1000*nameSex:1000 + 1000*nameSex])
+				sex = ["M", "F"][nameSex]
+				relation = choice(["PARENT", "SIBLING", "SPOUSE", "CHILD", "OTHER"])
+				
+			newEntry = [licDate, licNo, licProv, FName, MName, LName, training, sex, bd, grid_rating, license_class]
+			newEntryRel = [licDate, licNo, licProv, i + 1, relation]
+			driver.append(newEntry)
+			driver_for.append(newEntryRel)
+			
+	if (i >= len(policy)):
+		clmNo = i - len(policy)
+		clmType = claim[clmNo][2]
+		
+		faultPled = False
+		if (clmType == "COLL"):
+			drvCt = 1
+		elif (clmType == "PILEUP"):
+			drvCt = randint(2, 4)
+		else:
+			continue
+			
+		for dr in range(0, drvCt):
+			year = randint(1950, 2006)
+			month = str(randint(1, 12))
+			day = str(randint(1, 28))
+			bd = str(year) + "-" + month + "-" + day
+			licDate = str(year + 16) + "-" + month + "-" + day
+			licNo = (str(randint(0, 999999)).rjust(3, "0") + "-" + str(randint(0, 999)).rjust(3, "0"))
+			licProv = choice(provs)
+			nameSex = randint(0, 1)
+			FName = choice(fnames[1000*nameSex:1000 + 1000*nameSex])
+			MName = choice(fnames[1000*nameSex:1000 + 1000*nameSex])
+			LNmae = choice(lnames)
+			sex = ["M", "F"][nameSex]
+			training = choice(["Y", "N"])
+			grid_rating = randint(-15, 15)
+			license_class = randint(3, 5)
+			
+			fault = choice([0, 50, 100])
+			if ((fault == 100) and not faultPled):
+				faultPled = True
+			elif ((fault == 100) and faultPled):
+				fault = 50
+			
+			newEntry = [licDate, licNo, licProv, FName, MName, LName, training, sex, bd, grid_rating, license_class]
+			newEntryIID = [licDate, licNo, licProv, "T", fault, clmNo + 1]
+			driver.append(newEntry)
+			involved_in_driver.append(newEntryIID)
+			
 
 for mang in manager:
 	line = "INSERT INTO manager (Username, Password) VALUES ("
@@ -154,21 +243,45 @@ for cust in customer:
 		line += "\'" + str(field) + "\', "
 	f.write(line[0:-2] + ");\n")
 	
-for clm in claim:
-	line = "INSERT INTO claim (Accident_Date, Status, Type, location) VALUES ("
-	for field in clm:
-		line += "\'" + str(field) + "\', "
-	f.write(line[0:-2] + ");\n")
-	
 for pol in policy:
 	line = "INSERT INTO policy (Deductible, EffectiveDate, Status, Premium, CustomerNo) VALUES ("
 	for field in pol:
 		line += "\'" + str(field) + "\', "
 	f.write(line[0:-2] + ");\n")
 	
+for clm in claim:
+	line = "INSERT INTO claim (Accident_Date, Status, Type, location) VALUES ("
+	for field in clm:
+		line += "\'" + str(field) + "\', "
+	f.write(line[0:-2] + ");\n")
+	
+for rel in related_to:
+	line = "INSERT INTO related_to (PolicyNo, ClaimID) VALUES ("
+	for field in rel:
+		line += "\'" + str(field) + "\', "
+	f.write(line[0:-2] + ");\n")
+	
 for pay in payment:
 	line = "INSERT INTO payment (PolicyNo, TransactionID, Amount, Date) VALUES ("
 	for field in pay:
+		line += "\'" + str(field) + "\', "
+	f.write(line[0:-2] + ");\n")
+	
+for dr in driver:
+	line = "INSERT INTO driver (License_Date, License_No, License_Prov, FName, MName, LName, Training, Sex, Birth_Date, Grid_Rating, License_Class) VALUES ("
+	for field in dr:
+		line += "\'" + str(field) + "\', "
+	f.write(line[0:-2] + ");\n")
+	
+for dr in driver_for:
+	line = "INSERT INTO driver_for (License_Date, License_No, License_Prov, PolicyNo, Relationship) VALUES ("
+	for field in dr:
+		line += "\'" + str(field) + "\', "
+	f.write(line[0:-2] + ");\n")
+	
+for dr in involved_in_driver:
+	line = "INSERT INTO involved_in_driver (License_Date, License_No, License_Prov, F_T_Party, Percent_At_Fault, ClaimID) VALUES ("
+	for field in dr:
 		line += "\'" + str(field) + "\', "
 	f.write(line[0:-2] + ");\n")
 	
