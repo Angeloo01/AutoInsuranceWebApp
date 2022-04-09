@@ -13,6 +13,8 @@ except:
 	print("One positive integer command line argument needs to be provided for the desired customer count")
 	quit()
 	
+sampleNotes = []
+	
 cities = []
 provs = []
 fnames = []
@@ -59,17 +61,28 @@ with open("streets.txt", "r") as f:
 	for line in f:
 		streets.append(line.strip().split(". ")[1])
 		
+with open("artwar.txt", "r") as f:
+	section = []
+	par = ""
+	for line in f:
+		if (line.isspace()):
+			if (len(par) == 0):
+				continue
+			else:
+				section.append(par)
+				par = ""
+		elif (line[0] == "?" and len(section) != 0):
+			sampleNotes.append(section)
+			section = []
+		else:
+			par += line
+		
 f = open("data.sql", "w")
 		
 #***MANAGER***
-
-for i in range(randint(1, 1 + int(custCt * 0.01))):
-	newEntry = []
-	
-	newEntry.append((choice(fnames) + choice(lnames)).lower() + str(randint(0, 999999)))
-	newEntry.append("".join(choice(string.ascii_letters) for i in range(20)))
-	
-	manager.append(newEntry)
+manager.append(["mohamedyassin1", "root"])
+manager.append(["Angeloo01", "root"])
+manager.append(["aghiles5", "root"])
 		
 #***CUSTOMER***
 		
@@ -230,8 +243,7 @@ for i in range(len(policy) + len(claim)):
 			driver.append(newEntry)
 			involved_in_driver.append(newEntryIID)
 			
-#***Conviction***
-			
+#***Conviction***	
 for i in range(len(driver)):
 	conChance = randint(1, 7)
 	if conChance != 7:
@@ -255,7 +267,37 @@ for i in range(len(driver)):
 		newEntry.append(randint(1, 3))
 		
 		conviction.append(newEntry)
-			
+		
+#***Note***
+for i in range(len(policy)):
+	noteCt = randint(1, 8)
+	rawDate = policy[i][1].split("-")
+	lastDate = datetime.date(int(rawDate[0]), int(rawDate[1]), int(rawDate[2]))
+	thisOne = datetime.date.today()
+	for j in range(noteCt):
+		newEntry = []
+		
+		newEntry.append(i + 1)
+		
+		section = randint(0, len(sampleNotes) - 1)
+		par = randint(0, len(sampleNotes[section]) - 1)
+		
+		newEntry.append(str(section + 1) + ". " + str(par + 1) + ".")
+		
+		rawDist = thisOne - lastDate
+		dayDist = rawDist.days
+		randDay = randrange(dayDist)
+		newDate = lastDate + datetime.timedelta(days = randDay)
+		if (newDate == lastDate):
+			continue;
+		lastDate = newDate
+		
+		newEntry.append(newDate)
+		newEntry.append(sampleNotes[section][par])
+		newEntry.append(randint(1, 3))
+
+		note.append(newEntry)
+	
 
 for mang in manager:
 	line = "INSERT INTO manager (Username, Password) VALUES ("
@@ -314,6 +356,12 @@ for dr in involved_in_driver:
 for con in conviction:
 	line = "INSERT INTO conviction (License_Date, License_No, License_Prov, Date, Degree) VALUES ("
 	for field in con:
+		line += "\'" + str(field) + "\', "
+	f.write(line[0:-2] + ");\n")
+	
+for nute in note:
+	line = "INSERT INTO note (PolicyNo, Note_Title, Date, Text, ManagerID) VALUES ("
+	for field in nute:
 		line += "\'" + str(field) + "\', "
 	f.write(line[0:-2] + ");\n")
 	
