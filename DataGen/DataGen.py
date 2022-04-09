@@ -230,6 +230,32 @@ for i in range(len(policy) + len(claim)):
 			driver.append(newEntry)
 			involved_in_driver.append(newEntryIID)
 			
+#***Conviction***
+			
+for i in range(len(driver)):
+	conChance = randint(1, 7)
+	if conChance != 7:
+		continue
+		
+	conCt = randint(1, 8)
+	
+	for con in range(conCt):
+		newEntry = []
+		
+		licDate = driver[i][0]
+		newEntry.append(licDate)
+		newEntry.append(driver[i][1])
+		newEntry.append(driver[i][2])
+		licYear = int(licDate[0:4])
+		if licYear < 2021:
+			year = randint(licYear + 1 , 2021)
+		else:
+			continue
+		newEntry.append(str(year) + "-" + str(randint(1, 12)) + "-" + str(randint(1, 28)))
+		newEntry.append(randint(1, 3))
+		
+		conviction.append(newEntry)
+			
 
 for mang in manager:
 	line = "INSERT INTO manager (Username, Password) VALUES ("
@@ -282,6 +308,12 @@ for dr in driver_for:
 for dr in involved_in_driver:
 	line = "INSERT INTO involved_in_driver (License_Date, License_No, License_Prov, F_T_Party, Percent_At_Fault, ClaimID) VALUES ("
 	for field in dr:
+		line += "\'" + str(field) + "\', "
+	f.write(line[0:-2] + ");\n")
+
+for con in conviction:
+	line = "INSERT INTO conviction (License_Date, License_No, License_Prov, Date, Degree) VALUES ("
+	for field in con:
 		line += "\'" + str(field) + "\', "
 	f.write(line[0:-2] + ");\n")
 	

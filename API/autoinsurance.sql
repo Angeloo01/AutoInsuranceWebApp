@@ -105,7 +105,7 @@ CREATE TABLE CONVICTION (
     License_No		varchar(25) not null,
     License_Prov	varchar(25) not null,
     Date			date not null,
-    Degree			varchar(25) not null,
+    Degree			int not null,
     foreign key (License_Date, License_No, License_Prov) references DRIVER(License_Date, License_No, License_Prov),
     primary key (License_Date, License_No, License_Prov, Date)
 );
