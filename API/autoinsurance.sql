@@ -4,7 +4,7 @@ USE AUTO_INSURANCE;
 
 DROP TABLE IF EXISTS MANAGER;
 CREATE TABLE MANAGER (
-	Username		varchar(25) not null,
+	Username		varchar(25) not null UNIQUE,
 	Password		varchar(25) not null,
     ManagerID		int auto_increment not null,
 	primary key (ManagerID)
@@ -20,7 +20,7 @@ CREATE TABLE CUSTOMER (
     Province		varchar(25) not null,
     Country			varchar(25) not null,
     Phone_No		varchar(25) not null,
-    Email			varchar(250) not null,
+    Email			varchar(250) not null UNIQUE,
     Sex				varchar(25) not null,
     Birth_Date 		date not null,
     Password		varchar(500) not null,
