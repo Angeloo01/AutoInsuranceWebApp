@@ -542,7 +542,7 @@ for i in range(len(policy)):
 						if rel[0] == veh[0]:
 							prem += typ[5] * (veh[5] / 15000.00)
 	
-	policy[i][4] = round(prem, 2)
+	policy[i][3] = round(prem, 2)
 					
 	
 
