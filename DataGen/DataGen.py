@@ -54,7 +54,16 @@ corol = ["2T1", 1991, 2022, "Toyota", "Corolla", 1300]
 camaro = ["1GC", 2009, 2022, "Chevrolet", "Camaro", 2300]
 veyron = ["VF9", 2005, 2011, "Bugatti", "Veyron", 50000]
 
-sampleVeh = [truck, civic, rover, sprint, imprez, focus, corol, camaro, veyron]
+kawa = ["ML5", 2011, 2022, "Kawasaki", "Z1000R", 800, 1043, "Sport Touring"]
+hdsg = ["HDP", 2006, 2016, "Harley-Davidson", "Street Glide", 1200, 1690, "Touring"]
+fleet = ["BVS", 2007, 2022, "Fleetwood", "Southwind", 8000, 38, 175000]
+vespa = ["ZAP", 2009, 2022, "Vespa", "LX 150", 800, 150, 4500]
+canam = ["TFM", 2005, 2022, "Can-Am", "Outlander", 500, 650, 7000]
+
+endt = ["Accident Rating Waiver", "Family Protection", "Glass Waiver", "Accident Benefits"]
+accs = ["Winch", "Helmet", "Hitch", "Cover", "Plow"]
+
+sampleVeh = [truck, civic, rover, sprint, imprez, focus, corol, camaro, veyron, kawa, hdsg, fleet, vespa, canam]
 
 with open("cities.txt", "r") as f:
 	for line in f:
@@ -136,7 +145,7 @@ for i in range(custCt):
 		policy.append(newEntry)
 		
 #***CLAIM***
-for i in range(randint(0, int(custCt * 0.3))):
+for i in range(randint(0, int(custCt * 0.5))):
 	newEntry = []
 	
 	newEntry.append(str(randint(2012, 2021)) + "-" + str(randint(1, 12)) + "-" + str(randint(1, 28)))
@@ -274,7 +283,7 @@ for i in range(len(involved_in_driver) + len(policy)):
 	for j in range(vehCt):
 		newEntry, newEntryIU, newEntryIIV = [], [], []
 		
-		vehInfo = choices(sampleVeh, weights=[0.15, 0.15, 0.06, 0.15, 0.15, 0.15, 0.15, 0.039999, 0.000001])[0]
+		vehInfo = choices(sampleVeh, weights=[15, 15, 6, 15, 15, 15, 15, 4, 0.001, 10, 12, 5, 8, 9])[0]
 		
 		newVIN = 0
 		vinTaken = True
@@ -423,6 +432,72 @@ for i in range(len(driver)):
 		
 		conviction.append(newEntry)
 		
+#***Endorsement***
+for i in range(len(vehicle)):
+	localEndt = endt.copy()
+	endtCt = randint(0, len(endt))
+	for j in range(endtCt):
+		newEntry = []
+		newEntry.append(vehicle[i][0])
+		
+		newEndt = choice(localEndt)
+		localEndt.remove(newEndt)
+		newEntry.append(newEndt)
+	
+		endorsement.append(newEntry)
+		
+#***Motorcycle***
+for i in range(len(vehicle)):
+	vehVIN = vehicle[i][0][0:3]
+	for veh in sampleVeh:
+		if veh[0] == vehVIN:
+			vehInfo = veh
+	if ((vehVIN == kawa[0]) or (vehVIN == hdsg[0])):
+		newEntry = []
+		newEntry.append(vehicle[i][0])
+		newEntry.append(vehInfo[6])
+		newEntry.append(vehInfo[7])
+		
+		motorcycle.append(newEntry)
+		
+#***Motorhome***
+for i in range(len(vehicle)):
+	vehVIN = vehicle[i][0][0:3]
+	for veh in sampleVeh:
+		if veh[0] == vehVIN:
+			vehInfo = veh
+	if (vehVIN == fleet[0]):
+		newEntry = []
+		newEntry.append(vehicle[i][0])
+		newEntry.append(vehInfo[6])
+		newEntry.append(vehInfo[7])
+		
+		motorhome.append(newEntry)
+		
+#***Snow/ATV/Moped***
+for i in range(len(vehicle)):
+	vehVIN = vehicle[i][0][0:3]
+	for veh in sampleVeh:
+		if veh[0] == vehVIN:
+			vehInfo = veh
+	if ((vehVIN == vespa[0]) or (vehVIN == canam[0])):
+		newEntry = []
+		newEntry.append(vehicle[i][0])
+		newEntry.append(vehInfo[6])
+		newEntry.append(vehInfo[7])
+		
+		localAccs = accs.copy()
+		for j in range(randint(0, len(accs))):
+			newEntryAcc = []
+			newEntryAcc.append(vehicle[i][0])
+			newAcc = choice(localAccs)
+			localAccs.remove(newAcc)
+			newEntryAcc.append(newAcc)
+			accessory.append(newEntryAcc)
+		
+		snow_atv_moped.append(newEntry)
+		
+		
 #***Note***
 for i in range(len(policy)):
 	noteCt = randint(1, 8)
@@ -456,6 +531,21 @@ for i in range(len(policy)):
 
 		note.append(newEntry)
 
+#***Premium calculation***
+for i in range(len(policy)):
+	prem = 0
+	for rel in insd_under:
+		if (rel[1]) == (i + 1):
+			for typ in sampleVeh:
+				if typ[0] == rel[0][0:3]:
+					for veh in vehicle:
+						if rel[0] == veh[0]:
+							prem += typ[5] * (veh[5] / 15000.00)
+	
+	policy[i][4] = round(prem, 2)
+					
+	
+
 def writeData(list, tableStruct):
 	for tup in list:
 		line = "INSERT INTO " + tableStruct + " VALUES ("
@@ -479,7 +569,12 @@ writeData(drives, "drives (License_Date, License_No, License_Prov, VIN, P_O_Oper
 writeData(involved_in_driver, "involved_in_driver (License_Date, License_No, License_Prov, F_T_Party, Percent_At_Fault, ClaimID)")
 writeData(conviction, "conviction (License_Date, License_No, License_Prov, Date, Degree)")
 writeData(note, "note (PolicyNo, Note_Title, Date, Text, ManagerID)")
-	
+writeData(endorsement, "endorsement (VIN, Endorsement)")
+writeData(motorcycle, "motorcycle (VIN, CCs, Category)")
+writeData(motorhome, "motorhome (VIN, Length, Value)")
+writeData(snow_atv_moped, "snow_atv_moped (VIN, CCs, Value)")
+writeData(accessory, "accessory (VIN, Accessory)")
+
 f.close()
 	
 
