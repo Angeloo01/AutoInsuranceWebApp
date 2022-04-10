@@ -237,6 +237,7 @@ for i in range(len(policy) + len(claim)):
 		clmType = claim[clmNo][2]
 		
 		faultPled = False
+		faultAdmit = False
 		if (clmType == "COLL"):
 			drvCt = 1
 		elif (clmType == "PILEUP"):
@@ -255,17 +256,21 @@ for i in range(len(policy) + len(claim)):
 			nameSex = randint(0, 1)
 			FName = choice(fnames[1000*nameSex:1000 + 1000*nameSex])
 			MName = choice(fnames[1000*nameSex:1000 + 1000*nameSex])
-			LNmae = choice(lnames)
+			LName = choice(lnames)
 			sex = ["M", "F"][nameSex]
 			training = choice(["Y", "N"])
 			grid_rating = randint(-15, 15)
 			license_class = randint(3, 5)
 			
 			fault = choice([0, 50, 100])
-			if ((fault == 100) and not faultPled):
+			if (faultPled):
+				fault = 0
+			elif ((fault == 100) and (faultAdmit)):
+				choice([0, 50])
+			elif (fault == 100):
 				faultPled = True
-			elif ((fault == 100) and faultPled):
-				fault = 50
+			elif (fault == 50):
+				faultAdmit = True
 			elif (clmType == "H&R"):
 				fault = 100
 			
@@ -309,6 +314,7 @@ for i in range(len(involved_in_driver) + len(policy)):
 		
 		if i < len(involved_in_driver):
 			newEntryIIV.append(involved_in_driver[i][5])
+			involved_in_vehicle.append(newEntryIIV)
 		else:
 			insd_under.append(newEntryIU)
 		vehicle.append(newEntry)
@@ -381,12 +387,19 @@ for i in range(len(related_to)):
 	newEntry.append("First")
 	
 	fault = 100
-	faultPled = True
+	partFaultCt = 0
+	faultPled = False
 	for drv in involved_in_driver:
 		if ((drv[5] == clm) and (drv[4] == 100)):
-			faultPled = False
+			partFaultCt += 1
+		if ((drv[5] == clm) and (drv[4] == 50)):
+			faultPled = True
 	
 	if faultPled:
+		fault = 0
+	elif partFaultCt == 1:
+		fault = 50
+	elif partFaultCt > 1:
 		fault = choice([0, 50])
 	elif clmType == "ANIMAL":
 		fault = 0
