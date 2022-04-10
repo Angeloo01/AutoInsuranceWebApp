@@ -81,6 +81,7 @@ CREATE TABLE VEHICLE (
 	VIN		varchar(50) not null primary key,
     Year	int not null,
     Make	varchar(25) not null,
+	Model 	varchar(25) not null,
     Uses		varchar(25) not null,
     Km_per_yr	int not null,
     Lease_status	varchar(25) not null,
