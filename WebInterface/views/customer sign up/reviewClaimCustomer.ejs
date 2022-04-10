@@ -8,7 +8,7 @@
   <meta name="author"
     content="Edited by: Angelo Gonzales. Original: Mark Otto, Jacob Thornton, and Bootstrap contributors">
   <meta name="generator" content="Hugo 0.88.1">
-  <title>File Claim</title>
+  <title>Review Claim</title>
 
   <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/checkout/">
 
@@ -33,12 +33,13 @@
         font-size: 3.5rem;
       }
     }
+
+    .container {
+        max-width: 960px;
+        }
+
   </style>
 
-
-
-  <!-- Custom styles for this template -->
-  <link href="form-validation.css" rel="stylesheet">
 </head>
 
 <body class="bg-light">
@@ -47,13 +48,15 @@
     <main>
       <div class="py-5 text-center">
         <h1 class="h1 mb-3 fw-bold">Easy Auto Insurance</h1>
-        <h2>File a Claim</h2>
+        <h2>Review Claim</h2>
         <!-- <p class="lead">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p> -->
       </div>
 
       <div>
-        <h4 class="mb-3">Please enter your information</h4>
-        <form class="needs-validation" action="/customer/fileClaim" method="post" novalidatnovalidate>
+        <h4 class="mb-3">Please review customer information</h4>
+        <form>
+          
+
           <div class="row g-3">
             <div class="col-sm-4">
               <label for="firstName" class="form-label">First name</label>
@@ -96,13 +99,7 @@
 
             <div class="col-6">
               <label for="policy" class="form-label">Policy</label>
-              <select class="form-select" id="policy" name="policy" required aria-label="select example">
-                <option value="">Please select the policy</option>
-                <% for(const p of policy) {%>
-                  <option value="<%= p.PolicyNo %>">Policy <%= p.PolicyNo %></option>
-                <% } %>
-                <!-- <option value="2">Other</option> -->
-              </select>
+              <input type="text" class="form-control" id="policy" name="policy" value="<%= PolicyNo %>" readonly>
               <div class="invalid-feedback">Please select a valid policy</div>
             </div>
 
@@ -110,12 +107,7 @@
 
             <div class="col-6">
               <label for="type" class="form-label">Type</label>
-              <select class="form-select" id="type" name="type" required aria-label="select example">
-                <option>Please select the type</option>
-                <option>Collision</option>
-                <option>Comprehensive</option>
-                <option>Other</option>
-              </select>
+              <input type="text" class="form-control" id="type" name="type" value="<%= Type %>" readonly>
               <div class="invalid-feedback">Please select a valid type</div>
             </div>
 
@@ -123,100 +115,53 @@
 
             <div class="col-6">
               <label for="accident_date" class="form-label">Accident Date</label>
-              <input type="date" class="form-control" name="accident_date" id="accident_date" required>
+              <input type="text" class="form-control" id="accident_date" name="accident_date" value="<%= Accident_Date.split('T')[0] %>" readonly>
             </div>
 
             <div class="col-6"></div>
 
             <div class="col-4">
               <label for="driver" class="form-label">Driver</label>
-              <select class="form-select" id="driver" name="driver" required aria-label="select example">
-                <option value="">Please select the driver</option>
-                <% for(const d of driver) {%>
-                  <option value='{"FName": "<%= d.FName %>", "LName":"<%= d.LName %>"}'><%= d.FName %> <%= d.LName %></option>
-                <% } %>
-                <!-- <option value="2">Other</option> -->
-              </select>
+              <input type="text" class="form-control" id="driver" name="driver" value="<%= driver.FName %> <%= driver.LName %>" readonly>
               <div class="invalid-feedback">Please select a valid driver</div>
             </div>
 
             <div class="col-4">
               <label for="F_T_Party" class="form-label">F_T_Party</label>
-              <input type="text" class="form-control" id="F_T_Party" name="F_T_Party" value="" required>
-              <div class="invalid-feedback">
-                Please enter a valid F_T_Party address.
-              </div>
+              <input type="text" class="form-control" id="F_T_Party" name="F_T_Party" value="<%= F_T_Party %>" readonly>
+              <div class="invalid-feedback">Please select a valid F_T_Party</div>
             </div>
 
             <div class="col-4">
               <label for="Percent_At_Fault" class="form-label">Percent At Fault</label>
-                <input type="number" min="0" step="1" class="form-control" id="Percent_At_Fault" name="Percent_At_Fault" value="" required>
-              <div class="invalid-feedback">
-                Please enter a valid Percent_At_Fault address.
-              </div>
+              <input type="text" class="form-control" id="Percent_At_Fault" name="Percent_At_Fault" value="<%= Percent_At_Fault %>" readonly>
+              <div class="invalid-feedback">Please select a valid Percent_At_Fault</div>
             </div>
 
             <div class="col-6">
               <label for="vehicle" class="form-label">Vehicle</label>
-              <select class="form-select" id="vehicle" name="vehicle" required aria-label="select example">
-                <option value="">Please select the vehicle</option>
-                <% for(const v of vehicle) {%>
-                  <option value='<%= v.VIN %>'><%= v.Year %> <%= v.Make %></option>
-                <% } %>
-                <!-- <option value="2">Other</option> -->
-              </select>
-              <div class="invalid-feedback">Please select a valid vehicle</div>
+              <input type="text" class="form-control" id="vehicle" name="vehicle" value="<%= vehicle.Year %> <%= vehicle.Make %>" readonly>
             </div>
 
             <div class="col-6"></div>
 
             <div class="col-12">
               <label for="location" class="form-label">Location</label>
-              <input type="text" class="form-control" id="location" name="location" placeholder="1234 Main St" required>
-              <div class="invalid-feedback">
-                Please enter the location.
-              </div>
+              <input type="text" class="form-control" id="location" name="location" value="<%= location %>" readonly>
             </div>
-
-            <!-- <div class="col-md-6">
-              <label for="country" class="form-label">Country</label>
-              <select class="form-select" id="country" name="country" required>
-                <option value="">Choose...</option>
-                <option>Canada</option>
-              </select>
-              <div class="invalid-feedback">
-                Please select a valid country.
-              </div>
-            </div>
-
-            <div class="col-md-6">
-              <label for="province" class="form-label">Province/Territory</label>
-              <select class="form-select" id="province" name="province" required>
-                <option value="">Choose...</option>
-                <option>Alberta</option>
-              </select>
-              <div class="invalid-feedback">
-                Please provide a valid state.
-              </div>
-            </div> -->
 
             <!-- <div class="col-12">
               <label for="comments">Comments</label>
-              <textarea class="form-control" id="comments" name="comments" rows="6"></textarea>
+              <textarea class="form-control" id="comments" name="comments" rows="6" readonly></textarea>
             </div> -->
 
-            <!-- <div class="col-md-3">
-              <label for="zip" class="form-label">Zip</label>
-              <input type="text" class="form-control" id="zip" placeholder="" required>
-              <div class="invalid-feedback">
-                Zip code required.
-              </div>
-            </div> -->
           </div>
 
           <hr class="my-4">
 
-          <button class="w-100 btn btn-primary btn-lg" type="submit">File Claim</button>
+          <div class="w-100 btn-toobar mb-3 btn-group-justified" role="toolbar" aria-label="Basic example">
+            <a class="btn btn-primary" href="/claims" role="button">Back</a>
+          </div>
         </form>
       </div>
   </div>
@@ -226,8 +171,6 @@
     <p class="mb-1">&copy; 2022–2022 Easy Auto Insurance</p>
   </footer>
   </div>
-
-  <script src="form-validation.js"></script>
 </body>
 
 </html>

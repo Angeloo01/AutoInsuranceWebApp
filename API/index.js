@@ -33,16 +33,30 @@ app.post('/api/customer/login', async (req, res) => {
 
 //GET endpoint for searching for a customer
 app.get('/api/customer', (req, res) => {
-    connection.query('SELECT customer.CustomerNo, customer.Fname, customer.Lname  FROM customer WHERE Fname = ? AND Lname = ? AND Addr_line = ? AND Province = ? AND Country = ? AND Phone_No = ? AND Birth_Date = ?',
-        [req.query.fname, req.query.lname, req.query.addr, req.query.prov, req.query.country, req.query.phone, req.query.bdate],
-        (error, results, fields) => {
-            if (error) {
-                res.status(500).send();
-                console.log(error);
-                return;
-            }
-            res.json(results);
-        });
+    if(req.query.fname || req.query.lname || req.query.addr|| req.query.prov|| req.query.country|| req.query.phone|| req.query.bdate){
+        connection.query('SELECT customer.CustomerNo, customer.Fname, customer.Lname  FROM customer WHERE Fname = ? OR Lname = ? OR Addr_line = ? OR Province = ? OR Country = ? OR Phone_No = ? OR Birth_Date = ?',
+            [req.query.fname, req.query.lname, req.query.addr, req.query.prov, req.query.country, req.query.phone, req.query.bdate],
+            (error, results, fields) => {
+                if (error) {
+                    res.status(500).send();
+                    console.log(error);
+                    return;
+                }
+                res.json(results);
+            });
+        }
+    else{
+        connection.query('SELECT customer.CustomerNo, customer.Fname, customer.Lname  FROM customer',
+            (error, results, fields) => {
+                if (error) {
+                    res.status(500).send();
+                    console.log(error);
+                    return;
+                }
+                res.json(results);
+            });
+        }
+    
 });
 //PUT Method to edit customer's information
 app.put('/api/customer', (req, res) => {
@@ -142,7 +156,7 @@ app.get('/api/policy/list', (req, res) => {
 })
 //GET Method to view claim information
 app.get('/api/claim/view', (req, res) => {
-    connection.query('SELECT * FROM claim WHERE ClaimID = ?',
+    connection.query('SELECT * FROM claim LEFT JOIN related_to USING (ClaimID) LEFT JOIN involved_in_driver USING(ClaimID) LEFT JOIN involved_in_vehicle USING(ClaimID) WHERE ClaimID = ?',
         [req.query.claimno],
         (error, results, fields) => {
             if (error) {
@@ -169,7 +183,8 @@ app.post('/api/claim', (req, res) => {
 
 //PATCH endpoint for updating status in claim table
 app.patch('/api/claim', (req, res) => {
-    connection.query('UPDATE CLAIM SET Status = ? WHERE ClaimID = ?', [req.body.status, req.body.Claim_ID],
+    console.log(req.body);
+    connection.query('UPDATE CLAIM SET Status = ? WHERE ClaimID = ?', [req.body.Status, req.body.Claim_ID],
         (error, results, fields) => {
             if (error) {
                 res.status(500).send();
@@ -182,7 +197,7 @@ app.patch('/api/claim', (req, res) => {
 
 //PUT endpoint for updating a tuple in claim table
 app.put('/api/claim', (req, res) => {
-    //console.log(req.body);
+    //add claim to involved_in_driver
     if(req.body.driver && req.body.PolicyNo){
         console.log('calling insert involved in driver')
         connection.query(`INSERT INTO involved_in_driver (License_Date, License_No, License_Prov, F_T_Party, Percent_At_Fault, ClaimID) SELECT License_Date, License_No, License_Prov, ?, ?, '?' FROM driver JOIN driver_for USING (License_Date, License_No, License_Prov) WHERE PolicyNo = ? AND FName = ? AND LName = ?`,
@@ -197,6 +212,7 @@ app.put('/api/claim', (req, res) => {
                 res.status(200).send();
             });
     }
+    //add claim to related_to
     else if(req.body.PolicyNo){
         console.log('calling insert related to')
         connection.query(`INSERT INTO related_to (PolicyNo, ClaimID) VALUES (?, ?)`,
@@ -211,8 +227,20 @@ app.put('/api/claim', (req, res) => {
                 res.status(200).send();
             });
     }
+    //add claim to involved_in_vehicle
     else if(req.body.VIN){
-
+        console.log('calling insert involved_in_vehicle')
+        connection.query(`INSERT INTO involved_in_vehicle (VIN, ClaimID) VALUES (?, ?)`,
+            [req.body.VIN, req.body.Claim_ID],
+            (error, results, fields) => {
+                if (error) {
+                    res.status(500).send();
+                    console.log(error);
+                    return;
+                }
+                //console.log(results);
+                res.status(200).send();
+            });
     }
     else{
         connection.query('UPDATE CLAIM SET Accident_Date = ?, Status = ?, Type = ?, location = ? WHERE ClaimID = ?',
@@ -230,17 +258,31 @@ app.put('/api/claim', (req, res) => {
 
 //GET endpoint for claim table to get all claims for a policy
 app.get('/api/claim', (req, res) => {
-    connection.query('SELECT claim.ClaimID, claim.Accident_Date FROM claim JOIN related_to ON (claim.ClaimID = related_to.ClaimID) WHERE PolicyNo = ?',
-        [req.query.PolicyNo],
-        (error, results, fields) => {
-            if (error) {
-                res.status(500).send();
-                console.log(error);
-                return;
-            }
-            //console.log(results);
-            res.json(results);
-        });
+    if(req.query.PolicyNo){
+        connection.query('SELECT * FROM claim JOIN related_to ON (claim.ClaimID = related_to.ClaimID) WHERE PolicyNo = ?',
+            [req.query.PolicyNo],
+            (error, results, fields) => {
+                if (error) {
+                    res.status(500).send();
+                    console.log(error);
+                    return;
+                }
+                //console.log(results);
+                res.json(results);
+            });
+    }
+    else{
+        connection.query('SELECT * FROM claim LEFT JOIN related_to ON (claim.ClaimID = related_to.ClaimID) GROUP BY(claim.ClaimID)',
+            (error, results, fields) => {
+                if (error) {
+                    res.status(500).send();
+                    console.log(error);
+                    return;
+                }
+                //console.log(results);
+                res.json(results);
+            });
+    }
 });
 
 //GET a specific vehicle
@@ -287,7 +329,7 @@ app.put('/api/vehicle', (req, res) => {
 
 //GET endpoint for selecting tuples from vehicle table
 app.get('/api/vehicle', (req, res) => {
-    connection.query('SELECT vehicle.VIN, Year, Make FROM vehicle JOIN involved_in_vehicle ON (vehicle.VIN = involved_in_vehicle.VIN) WHERE PolicyNo = ? OR ClaimID = ?',
+    connection.query('SELECT vehicle.VIN, Year, Make FROM vehicle LEFT JOIN involved_in_vehicle ON (vehicle.VIN = involved_in_vehicle.VIN) WHERE PolicyNo = ? OR ClaimID = ? GROUP BY (VIN)',
         [req.query.PolicyNo, req.query.Claim_ID],
         (error, results, fields) => {
             if (error) {
@@ -295,12 +337,14 @@ app.get('/api/vehicle', (req, res) => {
                 console.log(error);
                 return;
             }
+            //console.log(results);
             res.json(results);
         });
 });
 
 //GET endpoint for selecting a tuple from driver table
 app.get('/api/driver/:licNo/:licProv/:licDate', (req, res) => {
+    //console.log(req.params);
     connection.query('SELECT * FROM driver WHERE License_Date = ? AND License_No = ? AND License_Prov = ?',
         [req.params.licDate, req.params.licNo, req.params.licProv],
         (error, results, fields) => {
@@ -309,6 +353,7 @@ app.get('/api/driver/:licNo/:licProv/:licDate', (req, res) => {
                 console.log(error);
                 return;
             }
+            //console.log(results);
             res.json(results[0]);
         });
 });

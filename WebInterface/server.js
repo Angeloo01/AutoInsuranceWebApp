@@ -48,6 +48,18 @@ function authManager(req, res, next) {
     return;
 }
 
+//middleware to check if manager is logged in
+function authManagerOrCustomer(req, res, next) {
+    if (req.session.logType) {
+        if (req.session.logType === 'manager' || req.session.logType === 'customer') {
+            next();
+            return;
+        }
+    }
+    res.status(401).send("You must log in first!");
+    return;
+}
+
 //endpoint to test authCustomer
 app.get('/tryCustomerOnly', authCustomer, (req, res) => {
     res.send("hello customer");
@@ -68,7 +80,7 @@ app.get('/', (req, res) => {
     }
     //if manager
     else if (req.session.ManagerID) {
-        res.render('Customer Menus/CustomerMenu', { 'email': req.session.ManagerID });
+        res.render('Customer Menus/ManagerMenu', { 'ManagerID': req.session.ManagerID });
         return;
     }
     //if not logged in
@@ -208,6 +220,44 @@ app.get('/claims', authCustomer, async (req, res) => {
     }
 });
 
+//get view of a single claim
+app.get('/claims/:ClaimID', authCustomer, async (req, res) => {
+    const ClaimID = req.params.ClaimID;
+    console.log('calling claims claimid '+req.params.ClaimID);
+    //call api
+    try {
+        //get fetch
+        var response = await fetch(apiURL + '/api/customer/viewInformation'+`?customerno=${req.session.CustomerNo}`);
+        //convert response to json
+        const customer = await response.json();
+
+        //get fetch
+        response = await fetch(apiURL + '/api/claim/view'+`?claimno=${ClaimID}`);
+        //convert response to json
+        const claim = await response.json();
+
+        //get fetch
+        response = await fetch(apiURL + '/api/vehicle/'+`${claim.VIN}`);
+        //convert response to json
+        const vehicle = await response.json();
+
+        //get fetch
+        response = await fetch(apiURL + '/api/driver/'+`${claim.License_No}/${claim.License_Prov}/${claim.License_Date.split('T')[0]}`);
+        //convert response to json
+        const driver = await response.json();
+
+        //console.log()
+        //console.log({...(customer[0]), ...claim, vehicle, driver});
+
+        res.render('customer sign up/reviewClaimCustomer', {...(customer[0]), ...claim, vehicle, driver});
+    }
+    //if error is returned
+    catch (error) {
+        console.log(error);
+        res.status(400).redirect('/claims');
+    }
+});
+
 //get file claim customer; auth customer
 app.get('/customer/fileClaim', authCustomer, async (req, res) => {
     
@@ -227,16 +277,24 @@ app.get('/customer/fileClaim', authCustomer, async (req, res) => {
         const policies = await response.json();
 
         var drivers = new Array();
+        var vehicles = new Array();
         for(const curr of policies){
-            const response2 = await fetch(apiURL + '/api/driver'+`?PolicyNo=${curr.PolicyNo}&ClaimID=`);
+            var response2 = await fetch(apiURL + '/api/driver'+`?PolicyNo=${curr.PolicyNo}&ClaimID=`);
             const drvs = await response2.json();
             for(const d of drvs){
                 drivers.push(d);
+            }
+
+            response2 = await fetch(apiURL + '/api/vehicle'+`?PolicyNo=${curr.PolicyNo}&ClaimID=`);
+            vehs = await response2.json();
+            for(const v of vehs){
+                vehicles.push(v);
             }
         };
 
         customer[0].policy = policies;
         customer[0].driver = drivers;
+        customer[0].vehicle = vehicles;
 
         //console.log(customer);
         res.render('customer sign up/fileClaim', customer[0]);
@@ -249,7 +307,7 @@ app.get('/customer/fileClaim', authCustomer, async (req, res) => {
 });
 
 //post file claim customer; auth customer
-app.post('/customer/fileClaim', authCustomer, async (req, res) => {
+app.post('/customer/fileClaim', authManagerOrCustomer, async (req, res) => {
     req.body.driver = JSON.parse(req.body.driver);
     //console.log(req.body);
     //res.redirect('/claims');
@@ -265,12 +323,14 @@ app.post('/customer/fileClaim', authCustomer, async (req, res) => {
         //convert response to json
         const { id } = await response.json()
 
+        //add policy claim relationship
         response = await fetch(apiURL + '/api/claim', {
             method: 'put',
             body: JSON.stringify({ PolicyNo: req.body.policy, Claim_ID: id }),
             headers: { 'Content-Type': 'application/json' }
         });
 
+        //add driver claim relationship
         response = await fetch(apiURL + '/api/claim', {
             method: 'put',
             body: JSON.stringify({ PolicyNo: req.body.policy, Claim_ID: id, 
@@ -278,8 +338,19 @@ app.post('/customer/fileClaim', authCustomer, async (req, res) => {
             headers: { 'Content-Type': 'application/json' }
         });
 
-        //console.log(customer);
-        res.redirect('/claims');
+        //add vehicle claim relationship
+        response = await fetch(apiURL + '/api/claim', {
+            method: 'put',
+            body: JSON.stringify({ VIN: req.body.vehicle, Claim_ID: id }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (req.session.logType === 'customer') {
+            res.redirect('/claims');
+        }
+        else{
+            res.redirect('/manager/claims');
+        }
     }
     //if error is returned
     catch (error) {
@@ -288,6 +359,176 @@ app.post('/customer/fileClaim', authCustomer, async (req, res) => {
     }
 });
 
+//view claims page for manager
+//call authManager: only managers can access page
+app.get('/manager/claims', authManager, async (req, res) => {
+    //call api
+    try {
+        //generate list of claims
+        var claims = new Array();
+        
+        const response2 = await fetch(apiURL + '/api/claim');
+        const claimRes = await response2.json();
+        //console.log(claimRes);
+        for(const c of claimRes){
+            const response3 = await fetch(apiURL + '/api/claim/view'+`?claimno=${c.ClaimID}`);
+            const claim = await response3.json();
+            claims.push(claim);
+        }
+        
+
+        //console.log(claims);
+
+        res.render('managerClaimView', {claims});
+    }
+    //if error is returned
+    catch (error) {
+        console.log(error);
+        res.status(400).redirect('/');
+    }
+});
+
+//get view of a single claim
+app.get('/manager/claims/:ClaimID/:PolicyNo', authManager, async (req, res) => {
+    const ClaimID = req.params.ClaimID;
+    const PolicyNo = req.params.PolicyNo;
+    //console.log('calling claims claimid '+req.params.ClaimID);
+    //call api
+    try {
+        //get fetch
+        var response = await fetch(apiURL + '/api/policy/view'+`?policyno=${PolicyNo}`);
+        //convert response to json
+        const policy = await response.json();
+        
+        response = await fetch(apiURL + '/api/customer/viewInformation'+`?customerno=${policy[0].CustomerNo}`);
+        //convert response to json
+        const customer = await response.json();
+
+        //get fetch
+        response = await fetch(apiURL + '/api/claim/view'+`?claimno=${ClaimID}`);
+        //convert response to json
+        const claim = await response.json();
+
+        //get fetch
+        response = await fetch(apiURL + '/api/vehicle/'+`${claim.VIN}`);
+        //convert response to json
+        const vehicle = await response.json();
+
+        //get fetch
+        response = await fetch(apiURL + '/api/driver/'+`${claim.License_No}/${claim.License_Prov}/${claim.License_Date.split('T')[0]}`);
+        //convert response to json
+        const driver = await response.json();
+
+        //console.log()
+        // console.log({...(customer[0]), ...claim, vehicle, driver});
+        // res.redirect('/manager/claims');
+        // return;
+        res.render('customer sign up/reviewClaimManager', {...(customer[0]), ...claim, vehicle, driver});
+    }
+    //if error is returned
+    catch (error) {
+        console.log(error);
+        res.status(400).redirect('/manager/claims');
+    }
+});
+
+//get view of a single claim
+app.post('/manager/claims/:ClaimID/:PolicyNo', authManager, async (req, res) => {
+    const ClaimID = req.params.ClaimID;
+    const PolicyNo = req.params.PolicyNo;
+    // console.log('calling post manager claims '+req.params.ClaimID);
+    // console.log(req.body);
+    // res.redirect('/manager/claims');
+    // return;
+    //call api
+    try {
+        //add vehicle claim relationship
+        const response = await fetch(apiURL + '/api/claim', {
+            method: 'patch',
+            body: JSON.stringify({ Status: req.body.Status, Claim_ID: ClaimID }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+        res.redirect('/manager/claims');
+    }
+    //if error is returned
+    catch (error) {
+        console.log(error);
+        res.status(400).redirect('/manager/claims');
+    }
+});
+
+//file claim view
+app.get('/manager/fileClaim', authManager, async (req, res) => {
+    //res.render('customer sign up/managerfileClaim');
+    try {
+        //get fetch
+        var response = await fetch(apiURL + '/api/customer');
+        //convert response to json
+        const customer = await response.json();
+        
+        res.render('customer sign up/managerfileClaim', {customer});
+    }
+    //if error is returned
+    catch (error) {
+        console.log(error);
+        res.status(400).redirect('/manager/claims');
+    }
+});
+
+//file claim view
+app.get('/manager/fileClaim/:CustomerNo', authManager, async (req, res) => {
+    //console.log("calling file claim cust no");
+    try {
+        //get fetch
+        var response = await fetch(apiURL + '/api/customer');
+        //convert response to json
+        const customer = await response.json();
+
+        //get fetch
+        const response0 = await fetch(apiURL + '/api/customer/viewInformation'+`?customerno=${req.params.CustomerNo}`);
+        //convert response to json
+        var cust = await response0.json();
+
+        //console.log(cust);
+
+        //get fetch
+        response = await fetch(apiURL + '/api/policy/list'+`?customerno=${req.params.CustomerNo}`);
+        //convert response to json
+        const policies = await response.json();
+
+        //console.log(policies);
+
+        var drivers = new Array();
+        var vehicles = new Array();
+        for(const curr of policies){
+            var response2 = await fetch(apiURL + '/api/driver'+`?PolicyNo=${curr.PolicyNo}&ClaimID=`);
+            const drvs = await response2.json();
+            for(const d of drvs){
+                drivers.push(d);
+            }
+
+            response2 = await fetch(apiURL + '/api/vehicle'+`?PolicyNo=${curr.PolicyNo}&ClaimID=`);
+            vehs = await response2.json();
+            for(const v of vehs){
+                vehicles.push(v);
+            }
+        };
+
+        cust[0].policy = policies;
+        cust[0].driver = drivers;
+        cust[0].vehicle = vehicles;
+
+        //console.log(cust);
+
+        
+        res.render('customer sign up/managerfileClaim', {customer, CustomerNo: req.params.CustomerNo, ...(cust[0])});
+    }
+    //if error is returned
+    catch (error) {
+        console.log(error);
+        res.status(400).redirect('/manager/claims');
+    }
+});
 app.listen(8080, () => {
     console.log("Listening on port 8080")
 });

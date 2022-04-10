@@ -44,7 +44,7 @@
       <h2 class="col-sm-8 h2 mb-3 mt-3 fw-bold" align="left">Claims</h2>
       <!-- <h2 class="col-sm-4 h2 mb-3 mt-3 fw-bold" align="right">Claims</h2> -->
       <div class="col-sm-4 mb-3 mt-3" align="right">
-        <a class="btn btn-primary" href="/customer/fileClaim" role="button">File Claim</a>
+        <a class="btn btn-primary" href="/manager/fileClaim" role="button">File Claim</a>
       </div>
     </div>
 
@@ -52,6 +52,7 @@
       <thead>
         <tr>
           <th scope="col">#</th>
+          <th scope="col">Policy #</th>
           <th scope="col">Type</th>
           <th scope="col">Location</th>
           <th scope="col">Date</th>
@@ -60,13 +61,16 @@
       </thead>
       <tbody>
         <% for(const c of claims) {%>
-        <tr class='clickable-row' data-href='/claims/<%= c.ClaimID %>'>
+          <% if(c.Status === 'under review') {%>
+        <tr class='clickable-row' data-href='/manager/claims/<%= c.ClaimID %>/<%= c.PolicyNo %>'>
           <th scope="row"><%= c.ClaimID %></th>
+          <td><%= c.PolicyNo %></td>
           <td><%= c.Type %></td>
           <td><%= c.location %></td>
           <td><%= c.Accident_Date.split("T")[0] %></td>
           <td><%= c.Status %></td>
         </tr>
+          <% } %>
         <% } %>
 
       </tbody>
