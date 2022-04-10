@@ -53,11 +53,11 @@
 
       <div>
         <h4 class="mb-3">Please enter your information</h4>
-        <form class="needs-validation" novalidate>
+        <form class="needs-validation" action="/customer/fileClaim" method="post" novalidatnovalidate>
           <div class="row g-3">
             <div class="col-sm-4">
               <label for="firstName" class="form-label">First name</label>
-              <input type="text" class="form-control" id="firstName" name="firstName" placeholder="" value="First" readonly>
+              <input type="text" class="form-control" id="firstName" name="firstName" placeholder="" value="<%= FName %>" readonly>
               <div class="invalid-feedback">
                 Valid first name is required.
               </div>
@@ -65,7 +65,7 @@
 
             <div class="col-sm-4">
               <label for="middleName" class="form-label">Middle name</label>
-              <input type="text" class="form-control" id="middleName" name="middleName" placeholder="" value="Middle" readonly>
+              <input type="text" class="form-control" id="middleName" name="middleName" placeholder="" value="<%= MName %>" readonly>
               <div class="invalid-feedback">
                 Valid middle name is required.
               </div>
@@ -73,7 +73,7 @@
 
             <div class="col-sm-4">
               <label for="lastName" class="form-label">Last name</label>
-              <input type="text" class="form-control" id="lastName" name="lastName" placeholder="" value="Last" readonly>
+              <input type="text" class="form-control" id="lastName" name="lastName" placeholder="" value="<%= LName %>" readonly>
               <div class="invalid-feedback">
                 Valid last name is required.
               </div>
@@ -81,14 +81,14 @@
 
             <div class="col-12">
               <label for="email" class="form-label">Email</label>
-              <input type="email" class="form-control" id="email" name="email" value="you@example.com" readonly>
+              <input type="email" class="form-control" id="email" name="email" value="<%= Email %>" readonly>
               <div class="invalid-feedback">
                 Please enter a valid email address.
               </div>
             </div>
             <div class="col-12">
               <label for="phone" class="form-label">Phone number</label>
-              <input type="phone" class="form-control" id="phone" name="phone" value="123-456-7890" readonly>
+              <input type="phone" class="form-control" id="phone" name="phone" value="<%= Phone_No %>" readonly>
               <div class="invalid-feedback">
                 Please enter a valid phone number address.
               </div>
@@ -98,8 +98,9 @@
               <label for="policy" class="form-label">Policy</label>
               <select class="form-select" id="policy" name="policy" required aria-label="select example">
                 <option value="">Please select the policy</option>
-                <option value="1">Policy1</option>
-                <option value="2">Policy2</option>
+                <% for(const p of policy) {%>
+                  <option value="<%= p.PolicyNo %>">Policy <%= p.PolicyNo %></option>
+                <% } %>
                 <!-- <option value="2">Other</option> -->
               </select>
               <div class="invalid-feedback">Please select a valid policy</div>
@@ -110,10 +111,10 @@
             <div class="col-6">
               <label for="type" class="form-label">Type</label>
               <select class="form-select" id="type" name="type" required aria-label="select example">
-                <option value="">Please select the type</option>
-                <option value="1">Collision</option>
-                <option value="2">Comprehensive</option>
-                <option value="2">Other</option>
+                <option>Please select the type</option>
+                <option>Collision</option>
+                <option>Comprehensive</option>
+                <option>Other</option>
               </select>
               <div class="invalid-feedback">Please select a valid type</div>
             </div>
@@ -121,21 +122,38 @@
             <div class="col-6"></div>
 
             <div class="col-6">
-              <label for="filing_date" class="form-label">Filing Date</label>
-              <input type="date" class="form-control" name="filing_date" id="filing_date" name="filing_date" required>
+              <label for="accident_date" class="form-label">Accident Date</label>
+              <input type="date" class="form-control" name="accident_date" id="accident_date" required>
             </div>
 
             <div class="col-6"></div>
 
-            <div class="col-6">
+            <div class="col-4">
               <label for="driver" class="form-label">Driver</label>
               <select class="form-select" id="driver" name="driver" required aria-label="select example">
                 <option value="">Please select the driver</option>
-                <option value="1">Driver1</option>
-                <option value="2">Driver2</option>
-                <option value="2">Other</option>
+                <% for(const d of driver) {%>
+                  <option value='{"FName": "<%= d.FName %>", "LName":"<%= d.LName %>"}'><%= d.FName %> <%= d.LName %></option>
+                <% } %>
+                <!-- <option value="2">Other</option> -->
               </select>
               <div class="invalid-feedback">Please select a valid driver</div>
+            </div>
+
+            <div class="col-4">
+              <label for="F_T_Party" class="form-label">F_T_Party</label>
+              <input type="text" class="form-control" id="F_T_Party" name="F_T_Party" value="" required>
+              <div class="invalid-feedback">
+                Please enter a valid F_T_Party address.
+              </div>
+            </div>
+
+            <div class="col-4">
+              <label for="Percent_At_Fault" class="form-label">Percent At Fault</label>
+                <input type="number" min="0" step="1" class="form-control" id="Percent_At_Fault" name="Percent_At_Fault" value="" required>
+              <div class="invalid-feedback">
+                Please enter a valid Percent_At_Fault address.
+              </div>
             </div>
 
             <div class="col-12">

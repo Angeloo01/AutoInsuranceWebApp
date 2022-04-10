@@ -182,16 +182,50 @@ app.patch('/api/claim', (req, res) => {
 
 //PUT endpoint for updating a tuple in claim table
 app.put('/api/claim', (req, res) => {
-    connection.query('UPDATE CLAIM SET Accident_Date = ?, Status = ?, Type = ?, location = ? WHERE ClaimID = ?',
-        [req.body.accident_date, req.body.status, req.body.type, req.body.location, req.body.Claim_ID],
-        (error, results, fields) => {
-            if (error) {
-                res.status(500).send();
-                console.log(error);
-                return;
-            }
-            res.status(200).send();
-        });
+    //console.log(req.body);
+    if(req.body.driver && req.body.PolicyNo){
+        console.log('calling insert involved in driver')
+        connection.query(`INSERT INTO involved_in_driver (License_Date, License_No, License_Prov, F_T_Party, Percent_At_Fault, ClaimID) SELECT License_Date, License_No, License_Prov, ?, ?, '?' FROM driver JOIN driver_for USING (License_Date, License_No, License_Prov) WHERE PolicyNo = ? AND FName = ? AND LName = ?`,
+            [req.body.driver.F_T_Party, req.body.driver.Percent_At_Fault, req.body.Claim_ID, req.body.PolicyNo, req.body.driver.FName, req.body.driver.LName],
+            (error, results, fields) => {
+                if (error) {
+                    res.status(500).send();
+                    console.log(error);
+                    return;
+                }
+                //console.log(results);
+                res.status(200).send();
+            });
+    }
+    else if(req.body.PolicyNo){
+        console.log('calling insert related to')
+        connection.query(`INSERT INTO related_to (PolicyNo, ClaimID) VALUES (?, ?)`,
+            [req.body.PolicyNo, req.body.Claim_ID],
+            (error, results, fields) => {
+                if (error) {
+                    res.status(500).send();
+                    console.log(error);
+                    return;
+                }
+                //console.log(results);
+                res.status(200).send();
+            });
+    }
+    else if(req.body.VIN){
+
+    }
+    else{
+        connection.query('UPDATE CLAIM SET Accident_Date = ?, Status = ?, Type = ?, location = ? WHERE ClaimID = ?',
+            [req.body.accident_date, req.body.status, req.body.type, req.body.location, req.body.Claim_ID],
+            (error, results, fields) => {
+                if (error) {
+                    res.status(500).send();
+                    console.log(error);
+                    return;
+                }
+                res.status(200).send();
+            });
+    }
 });
 
 //GET endpoint for claim table to get all claims for a policy
@@ -204,7 +238,7 @@ app.get('/api/claim', (req, res) => {
                 console.log(error);
                 return;
             }
-            console.log(results);
+            //console.log(results);
             res.json(results);
         });
 });
@@ -253,7 +287,7 @@ app.put('/api/vehicle', (req, res) => {
 
 //GET endpoint for selecting tuples from vehicle table
 app.get('/api/vehicle', (req, res) => {
-    connection.query('SELECT vehicle.VIN, Year, Make FROM vehicle JOIN involved_in_vehicle ON (vehicle.VIN = involved_in_vehicle.VIN) WHERE PolicyNo = ? AND ClaimID = ?',
+    connection.query('SELECT vehicle.VIN, Year, Make FROM vehicle JOIN involved_in_vehicle ON (vehicle.VIN = involved_in_vehicle.VIN) WHERE PolicyNo = ? OR ClaimID = ?',
         [req.query.PolicyNo, req.query.Claim_ID],
         (error, results, fields) => {
             if (error) {
@@ -279,19 +313,19 @@ app.get('/api/driver/:licNo/:licProv/:licDate', (req, res) => {
         });
 });
 
-//GET endpoint for selecting a tuple from driver table
-app.get('/api/driver/:licNo/:licProv/:licDate', (req, res) => {
-    connection.query('SELECT * FROM driver WHERE License_Date = ? AND License_No = ? AND License_Prov = ?',
-        [req.params.licDate, req.params.licNo, req.params.licProv],
-        (error, results, fields) => {
-            if (error) {
-                res.status(500).send();
-                console.log(error);
-                return;
-            }
-            res.json(results[0]);
-        });
-});
+// //GET endpoint for selecting a tuple from driver table
+// app.get('/api/driver/:licNo/:licProv/:licDate', (req, res) => {
+//     connection.query('SELECT * FROM driver WHERE License_Date = ? AND License_No = ? AND License_Prov = ?',
+//         [req.params.licDate, req.params.licNo, req.params.licProv],
+//         (error, results, fields) => {
+//             if (error) {
+//                 res.status(500).send();
+//                 console.log(error);
+//                 return;
+//             }
+//             res.json(results[0]);
+//         });
+// });
 
 //POST endpoint for creating a tuple in driver table
 app.post('/api/driver', (req, res) => {
@@ -328,7 +362,7 @@ app.put('/api/driver', (req, res) => {
 //GET method for listing all drivers on a policy or involved in a claim
 //Endpoint has been changed from blueprint, now also returns F/T party and % at fault or relationship as appropriate
 app.get('/api/driver', (req, res) => {
-    connection.query("SELECT d.License_No, d.FName, d.LName, df.Relationship FROM driver AS d, driver_for as df WHERE df.PolicyNo = ? AND d.License_No = df.License_No AND d.License_Date = df.License_Date AND d.License_Prov = df.License_Prov UNION SELECT d.License_No, d.FName, d.LName, iid.F_T_Party, iid.Percent_At_Fault FROM driver AS d, involved_in_driver AS iid WHERE iid.ClaimID = ? AND d.License_No = iid.License_No AND d.License_Date = iid.License_Date AND d.License_Prov = iid.License_Prov",
+    connection.query("SELECT d.License_No, d.FName, d.LName, df.Relationship, d.Grid_Rating FROM driver AS d, driver_for as df WHERE df.PolicyNo = ? AND d.License_No = df.License_No AND d.License_Date = df.License_Date AND d.License_Prov = df.License_Prov UNION SELECT d.License_No, d.FName, d.LName, iid.F_T_Party, iid.Percent_At_Fault FROM driver AS d, involved_in_driver AS iid WHERE iid.ClaimID = ? AND d.License_No = iid.License_No AND d.License_Date = iid.License_Date AND d.License_Prov = iid.License_Prov",
         [req.query.PolicyNo, req.query.ClaimID],
         (error, results, fields) => {
             if (error) {
@@ -351,6 +385,19 @@ app.get('/api/manager', (req, res) => {
             }
             res.json(results);
         });
+});
+
+app.post('/api/manager/login', async (req, res) => {
+    let sql = `SELECT password, ManagerID FROM manager WHERE username = ?`;
+    connection.query(sql, [req.body.username], function (error, results, fields) {
+        //console.log(results);
+        if (results[0] && req.body.password === results[0].password) {
+            res.json({ 'ManagerID': results[0].ManagerID });
+        }
+        else {
+            res.status(401).send('bad credentials');
+        }
+    })
 });
 
 //GET method for listing all payments on a policy
