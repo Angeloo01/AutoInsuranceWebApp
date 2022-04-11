@@ -94,10 +94,10 @@ app.get('/signup', (req, res) => {
 
 //endpoint for post new user
 app.post('/signup', async (req, res) => {
-    const {firstName, middleName, lastName, email, password, phone, sex,
-            birthday, address, country, province, zip} = req.body;
+    const { firstName, middleName, lastName, email, password, phone, sex,
+        birthday, address, country, province, zip } = req.body;
     console.log(req.body);
-    
+
     //call api using fetch
     try {
         const response = await fetch((apiURL + '/api/customer'), {
@@ -139,7 +139,7 @@ app.post('/login', async (req, res) => {
     //if error is returned
     catch (error) {
         //console.log(error);
-        res.status(401).render('front page', {'badCred': true});
+        res.status(401).render('front page', { 'badCred': true });
     }
 
 });
@@ -176,7 +176,7 @@ app.post('/managerLogin', async (req, res) => {
     //if error is returned
     catch (error) {
         //console.log(error);
-        res.status(401).render('managerLogin', {'badCred': true});
+        res.status(401).render('managerLogin', { 'badCred': true });
     }
 
 });
@@ -193,17 +193,17 @@ app.get('/claims', authCustomer, async (req, res) => {
     //call api
     try {
         //get fetch
-        const response = await fetch(apiURL + '/api/policy/list'+`?customerno=${req.session.CustomerNo}`);
+        const response = await fetch(apiURL + '/api/policy/list' + `?customerno=${req.session.CustomerNo}`);
         //convert response to json
         const policies = await response.json();
 
         var claims = new Array();
-        for(const curr of policies){
-            const response2 = await fetch(apiURL + '/api/claim'+`?PolicyNo=${curr.PolicyNo}`);
+        for (const curr of policies) {
+            const response2 = await fetch(apiURL + '/api/claim' + `?PolicyNo=${curr.PolicyNo}`);
             const claimRes = await response2.json();
 
-            for(const c of claimRes){
-                const response3 = await fetch(apiURL + '/api/claim/view'+`?claimno=${c.ClaimID}`);
+            for (const c of claimRes) {
+                const response3 = await fetch(apiURL + '/api/claim/view' + `?claimno=${c.ClaimID}`);
                 const claim = await response3.json();
                 claims.push(claim);
             }
@@ -211,7 +211,7 @@ app.get('/claims', authCustomer, async (req, res) => {
 
         //console.log(claims);
 
-        res.render('customerClaimView', {claims});
+        res.render('customerClaimView', { claims });
     }
     //if error is returned
     catch (error) {
@@ -223,33 +223,33 @@ app.get('/claims', authCustomer, async (req, res) => {
 //get view of a single claim
 app.get('/claims/:ClaimID', authCustomer, async (req, res) => {
     const ClaimID = req.params.ClaimID;
-    console.log('calling claims claimid '+req.params.ClaimID);
+    console.log('calling claims claimid ' + req.params.ClaimID);
     //call api
     try {
         //get fetch
-        var response = await fetch(apiURL + '/api/customer/viewInformation'+`?customerno=${req.session.CustomerNo}`);
+        var response = await fetch(apiURL + '/api/customer/viewInformation' + `?customerno=${req.session.CustomerNo}`);
         //convert response to json
         const customer = await response.json();
 
         //get fetch
-        response = await fetch(apiURL + '/api/claim/view'+`?claimno=${ClaimID}`);
+        response = await fetch(apiURL + '/api/claim/view' + `?claimno=${ClaimID}`);
         //convert response to json
         const claim = await response.json();
 
         //get fetch
-        response = await fetch(apiURL + '/api/vehicle/'+`${claim.VIN}`);
+        response = await fetch(apiURL + '/api/vehicle/' + `${claim.VIN}`);
         //convert response to json
         const vehicle = await response.json();
 
         //get fetch
-        response = await fetch(apiURL + '/api/driver/'+`${claim.License_No}/${claim.License_Prov}/${claim.License_Date.split('T')[0]}`);
+        response = await fetch(apiURL + '/api/driver/' + `${claim.License_No}/${claim.License_Prov}/${claim.License_Date.split('T')[0]}`);
         //convert response to json
         const driver = await response.json();
 
         //console.log()
         //console.log({...(customer[0]), ...claim, vehicle, driver});
 
-        res.render('customer sign up/reviewClaimCustomer', {...(customer[0]), ...claim, vehicle, driver});
+        res.render('customer sign up/reviewClaimCustomer', { ...(customer[0]), ...claim, vehicle, driver });
     }
     //if error is returned
     catch (error) {
@@ -260,34 +260,34 @@ app.get('/claims/:ClaimID', authCustomer, async (req, res) => {
 
 //get file claim customer; auth customer
 app.get('/customer/fileClaim', authCustomer, async (req, res) => {
-    
+
     // res.render('customer sign up/fileClaim', {FName: "test", MName: "test1", LName: "test2", Email: "test@abc", Phone_No: "123456", 
     //                                             policy: [{PolicyNo: 1}, {PolicyNo: 2}], driver: [{FName: "test", LName: "test1"}, {FName: "test2", LName: "test3"}]});
 
     //call api
     try {
         //get fetch
-        const response0 = await fetch(apiURL + '/api/customer/viewInformation'+`?customerno=${req.session.CustomerNo}`);
+        const response0 = await fetch(apiURL + '/api/customer/viewInformation' + `?customerno=${req.session.CustomerNo}`);
         //convert response to json
         const customer = await response0.json();
 
         //get fetch
-        const response = await fetch(apiURL + '/api/policy/list'+`?customerno=${req.session.CustomerNo}`);
+        const response = await fetch(apiURL + '/api/policy/list' + `?customerno=${req.session.CustomerNo}`);
         //convert response to json
         const policies = await response.json();
 
         var drivers = new Array();
         var vehicles = new Array();
-        for(const curr of policies){
-            var response2 = await fetch(apiURL + '/api/driver'+`?PolicyNo=${curr.PolicyNo}&ClaimID=`);
+        for (const curr of policies) {
+            var response2 = await fetch(apiURL + '/api/driver' + `?PolicyNo=${curr.PolicyNo}&ClaimID=`);
             const drvs = await response2.json();
-            for(const d of drvs){
+            for (const d of drvs) {
                 drivers.push(d);
             }
 
-            response2 = await fetch(apiURL + '/api/vehicle'+`?PolicyNo=${curr.PolicyNo}&ClaimID=`);
+            response2 = await fetch(apiURL + '/api/vehicle' + `?PolicyNo=${curr.PolicyNo}&ClaimID=`);
             vehs = await response2.json();
-            for(const v of vehs){
+            for (const v of vehs) {
                 vehicles.push(v);
             }
         };
@@ -333,8 +333,10 @@ app.post('/customer/fileClaim', authManagerOrCustomer, async (req, res) => {
         //add driver claim relationship
         response = await fetch(apiURL + '/api/claim', {
             method: 'put',
-            body: JSON.stringify({ PolicyNo: req.body.policy, Claim_ID: id, 
-                driver:{ F_T_Party: req.body.F_T_Party, Percent_At_Fault: req.body.Percent_At_Fault, FName: req.body.driver.FName, LName: req.body.driver.LName }}),
+            body: JSON.stringify({
+                PolicyNo: req.body.policy, Claim_ID: id,
+                driver: { F_T_Party: req.body.F_T_Party, Percent_At_Fault: req.body.Percent_At_Fault, FName: req.body.driver.FName, LName: req.body.driver.LName }
+            }),
             headers: { 'Content-Type': 'application/json' }
         });
 
@@ -348,7 +350,7 @@ app.post('/customer/fileClaim', authManagerOrCustomer, async (req, res) => {
         if (req.session.logType === 'customer') {
             res.redirect('/claims');
         }
-        else{
+        else {
             res.redirect('/manager/claims');
         }
     }
@@ -366,20 +368,20 @@ app.get('/manager/claims', authManager, async (req, res) => {
     try {
         //generate list of claims
         var claims = new Array();
-        
+
         const response2 = await fetch(apiURL + '/api/claim');
         const claimRes = await response2.json();
         //console.log(claimRes);
-        for(const c of claimRes){
-            const response3 = await fetch(apiURL + '/api/claim/view'+`?claimno=${c.ClaimID}`);
+        for (const c of claimRes) {
+            const response3 = await fetch(apiURL + '/api/claim/view' + `?claimno=${c.ClaimID}`);
             const claim = await response3.json();
             claims.push(claim);
         }
-        
+
 
         //console.log(claims);
 
-        res.render('managerClaimView', {claims});
+        res.render('managerClaimView', { claims });
     }
     //if error is returned
     catch (error) {
@@ -396,26 +398,26 @@ app.get('/manager/claims/:ClaimID/:PolicyNo', authManager, async (req, res) => {
     //call api
     try {
         //get fetch
-        var response = await fetch(apiURL + '/api/policy/view'+`?policyno=${PolicyNo}`);
+        var response = await fetch(apiURL + '/api/policy/view' + `?policyno=${PolicyNo}`);
         //convert response to json
         const policy = await response.json();
-        
-        response = await fetch(apiURL + '/api/customer/viewInformation'+`?customerno=${policy[0].CustomerNo}`);
+
+        response = await fetch(apiURL + '/api/customer/viewInformation' + `?customerno=${policy[0].CustomerNo}`);
         //convert response to json
         const customer = await response.json();
 
         //get fetch
-        response = await fetch(apiURL + '/api/claim/view'+`?claimno=${ClaimID}`);
+        response = await fetch(apiURL + '/api/claim/view' + `?claimno=${ClaimID}`);
         //convert response to json
         const claim = await response.json();
 
         //get fetch
-        response = await fetch(apiURL + '/api/vehicle/'+`${claim.VIN}`);
+        response = await fetch(apiURL + '/api/vehicle/' + `${claim.VIN}`);
         //convert response to json
         const vehicle = await response.json();
 
         //get fetch
-        response = await fetch(apiURL + '/api/driver/'+`${claim.License_No}/${claim.License_Prov}/${claim.License_Date.split('T')[0]}`);
+        response = await fetch(apiURL + '/api/driver/' + `${claim.License_No}/${claim.License_Prov}/${claim.License_Date.split('T')[0]}`);
         //convert response to json
         const driver = await response.json();
 
@@ -423,7 +425,7 @@ app.get('/manager/claims/:ClaimID/:PolicyNo', authManager, async (req, res) => {
         // console.log({...(customer[0]), ...claim, vehicle, driver});
         // res.redirect('/manager/claims');
         // return;
-        res.render('customer sign up/reviewClaimManager', {...(customer[0]), ...claim, vehicle, driver});
+        res.render('customer sign up/reviewClaimManager', { ...(customer[0]), ...claim, vehicle, driver });
     }
     //if error is returned
     catch (error) {
@@ -465,8 +467,8 @@ app.get('/manager/fileClaim', authManager, async (req, res) => {
         var response = await fetch(apiURL + '/api/customer');
         //convert response to json
         const customer = await response.json();
-        
-        res.render('customer sign up/managerfileClaim', {customer});
+
+        res.render('customer sign up/managerfileClaim', { customer });
     }
     //if error is returned
     catch (error) {
@@ -485,14 +487,14 @@ app.get('/manager/fileClaim/:CustomerNo', authManager, async (req, res) => {
         const customer = await response.json();
 
         //get fetch
-        const response0 = await fetch(apiURL + '/api/customer/viewInformation'+`?customerno=${req.params.CustomerNo}`);
+        const response0 = await fetch(apiURL + '/api/customer/viewInformation' + `?customerno=${req.params.CustomerNo}`);
         //convert response to json
         var cust = await response0.json();
 
         //console.log(cust);
 
         //get fetch
-        response = await fetch(apiURL + '/api/policy/list'+`?customerno=${req.params.CustomerNo}`);
+        response = await fetch(apiURL + '/api/policy/list' + `?customerno=${req.params.CustomerNo}`);
         //convert response to json
         const policies = await response.json();
 
@@ -500,16 +502,16 @@ app.get('/manager/fileClaim/:CustomerNo', authManager, async (req, res) => {
 
         var drivers = new Array();
         var vehicles = new Array();
-        for(const curr of policies){
-            var response2 = await fetch(apiURL + '/api/driver'+`?PolicyNo=${curr.PolicyNo}&ClaimID=`);
+        for (const curr of policies) {
+            var response2 = await fetch(apiURL + '/api/driver' + `?PolicyNo=${curr.PolicyNo}&ClaimID=`);
             const drvs = await response2.json();
-            for(const d of drvs){
+            for (const d of drvs) {
                 drivers.push(d);
             }
 
-            response2 = await fetch(apiURL + '/api/vehicle'+`?PolicyNo=${curr.PolicyNo}&ClaimID=`);
+            response2 = await fetch(apiURL + '/api/vehicle' + `?PolicyNo=${curr.PolicyNo}&ClaimID=`);
             vehs = await response2.json();
-            for(const v of vehs){
+            for (const v of vehs) {
                 vehicles.push(v);
             }
         };
@@ -520,13 +522,27 @@ app.get('/manager/fileClaim/:CustomerNo', authManager, async (req, res) => {
 
         //console.log(cust);
 
-        
-        res.render('customer sign up/managerfileClaim', {customer, CustomerNo: req.params.CustomerNo, ...(cust[0])});
+
+        res.render('customer sign up/managerfileClaim', { customer, CustomerNo: req.params.CustomerNo, ...(cust[0]) });
     }
     //if error is returned
     catch (error) {
         console.log(error);
         res.status(400).redirect('/manager/claims');
+    }
+});
+//customer change request view
+app.get('/customer/changeRequest', authCustomer, async (req, res) => {
+    try {
+        //get fetch
+        const response = await fetch(apiURL + '/api/policy/list' + `?customerno=${req.session.CustomerNo}`);
+        //convert response to json
+        const policies = await response.json();
+        res.render('Customer Menus/ChangeRequestMenu', { 'email': req.session.email, policies });
+        return;
+    }
+    catch (error) {
+        console.log(error);
     }
 });
 app.listen(8080, () => {

@@ -8,8 +8,8 @@ app.use(express.json());
 var connection = mysql.createConnection({
     host: "localhost",
     user: "root",
-    //password: "hello12345",
-    password: "sql_password",
+    password: "hello12345",
+    //password: "sql_password",
     database: "auto_insurance"
 });
 
@@ -33,7 +33,7 @@ app.post('/api/customer/login', async (req, res) => {
 
 //GET endpoint for searching for a customer
 app.get('/api/customer', (req, res) => {
-    if(req.query.fname || req.query.lname || req.query.addr|| req.query.prov|| req.query.country|| req.query.phone|| req.query.bdate){
+    if (req.query.fname || req.query.lname || req.query.addr || req.query.prov || req.query.country || req.query.phone || req.query.bdate) {
         connection.query('SELECT customer.CustomerNo, customer.Fname, customer.Lname  FROM customer WHERE Fname = ? OR Lname = ? OR Addr_line = ? OR Province = ? OR Country = ? OR Phone_No = ? OR Birth_Date = ?',
             [req.query.fname, req.query.lname, req.query.addr, req.query.prov, req.query.country, req.query.phone, req.query.bdate],
             (error, results, fields) => {
@@ -44,8 +44,8 @@ app.get('/api/customer', (req, res) => {
                 }
                 res.json(results);
             });
-        }
-    else{
+    }
+    else {
         connection.query('SELECT customer.CustomerNo, customer.Fname, customer.Lname  FROM customer',
             (error, results, fields) => {
                 if (error) {
@@ -55,8 +55,8 @@ app.get('/api/customer', (req, res) => {
                 }
                 res.json(results);
             });
-        }
-    
+    }
+
 });
 //PUT Method to edit customer's information
 app.put('/api/customer', (req, res) => {
@@ -88,7 +88,7 @@ app.get('/api/customer/viewInformation', (req, res) => {
 app.post('/api/customer', async (req, res) => {
     try {
         //const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        var sql = `INSERT INTO customer (Fname, MName, LName, Addr_Line, Province, Country, Phone_No, Email, Sex, Birth_Date, Password, Transit_No, Insititute_No, Acct_No) VALUES ('${req.body.firstName}', '${req.body.middleName}', '${req.body.lastName}', '${req.body.address}', '${req.body.province}', '${req.body.country}', '${req.body.phone}', '${req.body.email}', '${req.body.sex}', '${req.body.birthday}', '${req.body.password}', '${req.body.transitno}', '${req.body.instno}', '${req.body.acctno}')`;
+        var sql = `INSERT INTO customer (Fname, MName, LName, Addr_Line, Province, Country, Phone_No, Email, Sex, Birth_Date, Password, Transit_No, Institute_No, Acct_No) VALUES ('${req.body.firstName}', '${req.body.middleName}', '${req.body.lastName}', '${req.body.address}', '${req.body.province}', '${req.body.country}', '${req.body.phone}', '${req.body.email}', '${req.body.sex}', '${req.body.birthday}', '${req.body.password}', '${req.body.transitno}', '${req.body.instno}', '${req.body.acctno}')`;
         connection.query(sql, function (err, result) {
             if (err) {
                 res.status(500).send();
@@ -198,7 +198,7 @@ app.patch('/api/claim', (req, res) => {
 //PUT endpoint for updating a tuple in claim table
 app.put('/api/claim', (req, res) => {
     //add claim to involved_in_driver
-    if(req.body.driver && req.body.PolicyNo){
+    if (req.body.driver && req.body.PolicyNo) {
         console.log('calling insert involved in driver')
         connection.query(`INSERT INTO involved_in_driver (License_Date, License_No, License_Prov, F_T_Party, Percent_At_Fault, ClaimID) SELECT License_Date, License_No, License_Prov, ?, ?, '?' FROM driver JOIN driver_for USING (License_Date, License_No, License_Prov) WHERE PolicyNo = ? AND FName = ? AND LName = ?`,
             [req.body.driver.F_T_Party, req.body.driver.Percent_At_Fault, req.body.Claim_ID, req.body.PolicyNo, req.body.driver.FName, req.body.driver.LName],
@@ -213,7 +213,7 @@ app.put('/api/claim', (req, res) => {
             });
     }
     //add claim to related_to
-    else if(req.body.PolicyNo){
+    else if (req.body.PolicyNo) {
         console.log('calling insert related to')
         connection.query(`INSERT INTO related_to (PolicyNo, ClaimID) VALUES (?, ?)`,
             [req.body.PolicyNo, req.body.Claim_ID],
@@ -228,7 +228,7 @@ app.put('/api/claim', (req, res) => {
             });
     }
     //add claim to involved_in_vehicle
-    else if(req.body.VIN){
+    else if (req.body.VIN) {
         console.log('calling insert involved_in_vehicle')
         connection.query(`INSERT INTO involved_in_vehicle (VIN, ClaimID) VALUES (?, ?)`,
             [req.body.VIN, req.body.Claim_ID],
@@ -242,7 +242,7 @@ app.put('/api/claim', (req, res) => {
                 res.status(200).send();
             });
     }
-    else{
+    else {
         connection.query('UPDATE CLAIM SET Accident_Date = ?, Status = ?, Type = ?, location = ? WHERE ClaimID = ?',
             [req.body.accident_date, req.body.status, req.body.type, req.body.location, req.body.Claim_ID],
             (error, results, fields) => {
@@ -258,7 +258,7 @@ app.put('/api/claim', (req, res) => {
 
 //GET endpoint for claim table to get all claims for a policy
 app.get('/api/claim', (req, res) => {
-    if(req.query.PolicyNo){
+    if (req.query.PolicyNo) {
         connection.query('SELECT * FROM claim JOIN related_to ON (claim.ClaimID = related_to.ClaimID) WHERE PolicyNo = ?',
             [req.query.PolicyNo],
             (error, results, fields) => {
@@ -271,7 +271,7 @@ app.get('/api/claim', (req, res) => {
                 res.json(results);
             });
     }
-    else{
+    else {
         connection.query('SELECT * FROM claim LEFT JOIN related_to ON (claim.ClaimID = related_to.ClaimID) GROUP BY(claim.ClaimID)',
             (error, results, fields) => {
                 if (error) {
