@@ -531,22 +531,22 @@ app.get('/manager/fileClaim/:CustomerNo', authManager, async (req, res) => {
         res.status(400).redirect('/manager/claims');
     }
 });
-//customer change request view
-app.get('/customer/changeRequest', authCustomer, async (req, res) => {
+//customer list policies get request, renders the list policies menu
+app.get('/customer/listPolicies', authCustomer, async (req, res) => {
     try {
         //get fetch
         const response = await fetch(apiURL + '/api/policy/list' + `?customerno=${req.session.CustomerNo}`);
         //convert response to json
         const policies = await response.json();
         //render the page and pass the customer's email address
-        res.render('Customer Menus/ChangeRequestMenu', { 'email': req.session.email, policies });
+        res.render('Customer Menus/CustomerPolicies', { 'email': req.session.email, policies });
         return;
     }
     catch (error) {
         console.log(error);
     }
 });
-//customer view information view, accessed from inside the customer menu
+//customer view information get request, accessed from inside the customer menu
 app.get('/customer/information', authCustomer, async (req, res) => {
     try {
         //get all the customer's information
@@ -559,8 +559,10 @@ app.get('/customer/information', authCustomer, async (req, res) => {
         console.log(error);
     }
 })
+//customer edit information get request, accessed from customer information menu
 app.get('/customer/editInformation', authCustomer, async (req, res) => {
     try {
+        //fetch the api url for viewing information, pass in customer no as parameter
         const response = await fetch(apiURL + '/api/customer/viewInformation' + `?customerno=${req.session.CustomerNo}`);
         //convert response to json
         const information = await response.json();
@@ -571,15 +573,16 @@ app.get('/customer/editInformation', authCustomer, async (req, res) => {
     }
 
 });
+//post request to edit customer information, accessed once customer edit information form is submitted.
 app.post('/customer/editInformation', async (req, res) => {
-    console.log(req.body);
     try {
+        //fetch the url, and pass in customer number as a url parameter
         var response = await fetch((apiURL + '/api/customer' + `?customerno=${req.session.CustomerNo}`), {
-            method: 'put',
-            body: JSON.stringify(req.body),
+            method: 'put', //make methid = put since the api endpoint is a PUT request
+            body: JSON.stringify(req.body), //everything is already in correct order from form, so just json.stringify the entire request
             headers: { 'Content-Type': 'application/json' }
         });
-        res.redirect('/customer/information');
+        res.redirect('/customer/information'); //redirect back to information page to view changes
     }
     catch {
 
