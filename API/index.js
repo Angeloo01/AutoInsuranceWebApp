@@ -60,8 +60,8 @@ app.get('/api/customer', (req, res) => {
 });
 //PUT Method to edit customer's information
 app.put('/api/customer', (req, res) => {
-    connection.query('UPDATE customer SET Addr_Line = ?, Country = ?, Phone_No = ?, Province = ?, Email = ?, Sex = ?, Birth_date = ?, Transit_No = ?, Institute_No = ?, Acct_No = ? WHERE Fname = ? AND Mname = ? AND Lname = ?',
-        [req.body.addr, req.body.phone, req.body.country, req.body.prov, req.body.email, req.body.sex, req.body.bdate, req.body.transitno, req.body.instituteno, req.body.acctno, req.body.fname, req.body.mname, req.body.lname],
+    connection.query('UPDATE customer SET Email = ?, Password = ?, Phone_No = ?, Sex = ?, Addr_Line = ?, Country = ?, Province = ?, Transit_No = ?, Institute_No = ?, Acct_No = ? WHERE CustomerNo = ?',
+        [req.body.email, req.body.password, req.body.phone, req.body.sex, req.body.address, req.body.country, req.body.province, req.body.transitno, req.body.instno, req.body.acctno, req.query.customerno],
         (error, results, fields) => {
             if (error) {
                 res.status(500).send();

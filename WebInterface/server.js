@@ -538,6 +538,7 @@ app.get('/customer/changeRequest', authCustomer, async (req, res) => {
         const response = await fetch(apiURL + '/api/policy/list' + `?customerno=${req.session.CustomerNo}`);
         //convert response to json
         const policies = await response.json();
+        //render the page and pass the customer's email address
         res.render('Customer Menus/ChangeRequestMenu', { 'email': req.session.email, policies });
         return;
     }
@@ -545,6 +546,46 @@ app.get('/customer/changeRequest', authCustomer, async (req, res) => {
         console.log(error);
     }
 });
+//customer view information view, accessed from inside the customer menu
+app.get('/customer/information', authCustomer, async (req, res) => {
+    try {
+        //get all the customer's information
+        const response = await fetch(apiURL + '/api/customer/viewInformation' + `?customerno=${req.session.CustomerNo}`);
+        //convert response to json
+        const information = await response.json();
+        res.render('Customer Menus/CustomerInformation', { 'email': req.session.email, information });
+    }
+    catch (error) {
+        console.log(error);
+    }
+})
+app.get('/customer/editInformation', authCustomer, async (req, res) => {
+    try {
+        const response = await fetch(apiURL + '/api/customer/viewInformation' + `?customerno=${req.session.CustomerNo}`);
+        //convert response to json
+        const information = await response.json();
+        res.render('Customer Menus/CustomerEditInfo', { 'email': req.session.email, information });
+    }
+    catch (error) {
+        console.log(error);
+    }
+
+});
+app.post('/customer/editInformation', async (req, res) => {
+    console.log(req.body);
+    try {
+        var response = await fetch((apiURL + '/api/customer' + `?customerno=${req.session.CustomerNo}`), {
+            method: 'put',
+            body: JSON.stringify(req.body),
+            headers: { 'Content-Type': 'application/json' }
+        });
+        res.redirect('/customer/information');
+    }
+    catch {
+
+    }
+});
+
 app.listen(8080, () => {
     console.log("Listening on port 8080")
 });
