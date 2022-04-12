@@ -13,6 +13,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.static('views/Customer Menus'));
 app.use(express.static('views/customer sign up'));
+app.use(express.static('views/Policies'));
 app.use(express.urlencoded({ extended: true })); //to parse HTML form data (aka read HTML form data)
 //app.use(express.static(path.join(__dirname, '/public')));
 app.use(express.json());
@@ -539,7 +540,7 @@ app.get('/customer/listPolicies', authCustomer, async (req, res) => {
         //convert response to json
         const policies = await response.json();
         //render the page and pass the customer's email address
-        res.render('Customer Menus/CustomerPolicies', { 'email': req.session.email, policies });
+        res.render('Policies/CustomerPolicies', { 'email': req.session.email, policies });
         return;
     }
     catch (error) {
