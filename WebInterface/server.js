@@ -15,7 +15,7 @@ app.use(express.static('views/Customer Menus'));
 app.use(express.static('views/customer sign up'));
 app.use(express.static('views/Policies'));
 app.use(express.urlencoded({ extended: true })); //to parse HTML form data (aka read HTML form data)
-//app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.static(path.join(__dirname, '/public')));
 app.use(express.json());
 app.use(session({
     secret: 'secretforcpsc371autoinsurancewebapp',
@@ -33,7 +33,7 @@ function authCustomer(req, res, next) {
             return;
         }
     }
-    res.status(401).send("You must log in first!");
+    res.status(401).redirect("/");
     return;
 }
 
@@ -45,7 +45,7 @@ function authManager(req, res, next) {
             return;
         }
     }
-    res.status(401).send("You must log in first!");
+    res.status(401).redirect("/");
     return;
 }
 
@@ -57,7 +57,7 @@ function authManagerOrCustomer(req, res, next) {
             return;
         }
     }
-    res.status(401).send("You must log in first!");
+    res.status(401).redirect("/");
     return;
 }
 
@@ -626,6 +626,26 @@ app.get('/manager/policies/:PolicyNo', authManager, async (req, res) => {
     }
 });
 
+//manager update policy status post
+app.post('/manager/policies/:PolicyNo', authManager, async (req, res) => {
+    //console.log(req.body);
+    try {
+        var response = await fetch((apiURL + `/api/policy/${req.params.PolicyNo}`), {
+            method: 'patch', //
+            body: JSON.stringify({ Status: req.body.status }), //
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        //console.log(policies);
+        res.redirect(`/manager/policies/${req.params.PolicyNo}`);
+
+    }
+    catch (error) {
+        console.log(error);
+        res.status(400).redirect('/');
+    }
+});
+
 //manager view notes
 app.get('/manager/policies/notes/:PolicyNo', authManager, async (req, res) => {
     try {
@@ -721,6 +741,49 @@ app.get('/customer/PolicyPage/:PolicyNo', authCustomer, async (req, res) => {
         console.log(error);
     }
 });
+
+//get PinkCard page
+app.get('/customer/pinkcard/:PolicyNo', authCustomer, async (req, res) => {
+    //console.log("calling pinkcard");
+    try {
+        var response = await fetch(apiURL + '/api/policy/view' + `?policyno=${req.params.PolicyNo}`);
+        //convert response to json
+        const policy = (await response.json())[0];
+
+        response = await fetch(apiURL + '/api/vehicle' + `?PolicyNo=${req.params.PolicyNo}&ClaimID=`);
+        const vehicles = await response.json();
+        
+        res.render('PinkCard/ViewPinkCard', { ...policy, vehicles });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(400).redirect('/');
+    }
+});
+
+//customer list policies get request, renders the list policies menu
+app.get('/customer/payments', authCustomer, async (req, res) => {
+    try {
+        //get fetch
+        var response = await fetch(apiURL + '/api/policy/list' + `?customerno=${req.session.CustomerNo}`);
+        //convert response to json
+        var policies = await response.json();
+        
+        for(p of policies){
+            response = await fetch(apiURL + '/api/payment' + `?policyno=${p.PolicyNo}`);
+            //convert response to json
+            p.payments = await response.json();
+        }
+        //console.log(policies);
+        res.render('Payments/ViewPayments', {policies});
+        return;
+    }
+    catch (error) {
+        console.log(error);
+        res.status(400).redirect('/');
+    }
+});
+
 app.listen(8080, () => {
     console.log("Listening on port 8080")
 });

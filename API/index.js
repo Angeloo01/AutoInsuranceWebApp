@@ -8,8 +8,8 @@ app.use(express.json());
 var connection = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "hello12345",
-    //password: "sql_password",
+    //password: "hello12345",
+    password: "sql_password",
     database: "auto_insurance"
 });
 
@@ -141,6 +141,22 @@ app.get('/api/policy/view', (req, res) => {
             res.json(results);
         });
 })
+
+//PATCH Method to update a policy
+app.patch('/api/policy/:PolicyNo', (req, res) => {
+    //console.log([req.body.Status, req.params.PolicyNo]);
+    connection.query('UPDATE policy SET Status = ? WHERE PolicyNo = ?',
+        [req.body.Status, req.params.PolicyNo],
+        (error, results, fields) => {
+            if (error) {
+                res.status(500).send();
+                console.log(error);
+                return;
+            }
+            res.status(200).send();
+        });
+})
+
 //GET Method to list all policies for a customer
 app.get('/api/policy/list', (req, res) => {
     connection.query('SELECT policy.PolicyNo, policy.EffectiveDate FROM policy JOIN customer ON (policy.CustomerNo = customer.CustomerNo) WHERE policy.CustomerNo = ?',
@@ -343,7 +359,7 @@ app.put('/api/vehicle', (req, res) => {
 
 //GET endpoint for selecting tuples from vehicle table
 app.get('/api/vehicle', (req, res) => {
-    connection.query('SELECT vehicle.VIN, Year, Make FROM vehicle LEFT JOIN involved_in_vehicle ON (vehicle.VIN = involved_in_vehicle.VIN) LEFT JOIN insd_under ON (vehicle.VIN = insd_under.VIN) WHERE PolicyNo = ? OR ClaimID = ? GROUP BY (VIN)',
+    connection.query('SELECT vehicle.VIN, Year, Make, Model FROM vehicle LEFT JOIN involved_in_vehicle ON (vehicle.VIN = involved_in_vehicle.VIN) LEFT JOIN insd_under ON (vehicle.VIN = insd_under.VIN) WHERE PolicyNo = ? OR ClaimID = ? GROUP BY (VIN)',
         [req.query.PolicyNo, req.query.Claim_ID],
         (error, results, fields) => {
             if (error) {
@@ -503,7 +519,7 @@ app.get('/api/note', (req, res) => {
 
 //POST method for a manager to add a note to a policy
 app.post('/api/note', (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     connection.query('INSERT INTO note (PolicyNo, Note_Title, Date, Text, ManagerID) VALUES (?,?,?,?,?)',
         [req.body.policyno, req.body.note_title, req.body.date, req.body.text, req.body.ManagerID],
         (error, results, fields) => {

@@ -181,7 +181,7 @@
                 <option value="">Please select the vehicle</option>
                 <% if(typeof vehicle != 'undefined') {%>
                 <% for(const v of vehicle) {%>
-                  <option value='<%= v.VIN %>'><%= v.Year %> <%= v.Make %></option>
+                  <option value='<%= v.VIN %>'><%= v.Year %> <%= v.Make %> <%= v.Model %></option>
                 <% } %>
                 <% } %>
                 <!-- <option value="2">Other</option> -->
@@ -203,6 +203,7 @@
           <hr class="my-4">
 
           <button class="w-100 btn btn-primary btn-lg" type="submit">File Claim</button>
+          <a class="w-100 btn btn-danger btn-lg" style="margin-top:20px" role="button" href="/manager/claims">Discard</a>
         </form>
       </div>
   </div>

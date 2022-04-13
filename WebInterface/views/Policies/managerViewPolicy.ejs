@@ -31,18 +31,28 @@
 					<a class="btn btn-primary mb-3 mt-3 col-12" role="button" href="/manager/policies/notes/<%= PolicyNo %>">View Notes</a>
 				</div>
 				<div class="col-6">
-					<button class="btn btn-primary mb-3 mt-3 col-12" role="button">Edit Status</button>
-				</div>
-			</div>
-			
-			<div class="row gx-3">
-				<div class="col-6">
 					<a class="btn btn-primary mb-3 mt-3 col-12" role="button" href="/manager/policies/newNote/<%= PolicyNo %>">Add Note</a>
 				</div>
-				<!-- <div class="col-6">
-					<button class="btn btn-primary mb-3 mt-3 col-12" role="button">View Claim History</button>
-				</div> -->
+				
 			</div>
+			
+			<form action="/manager/policies/<%= PolicyNo %>" method="post">
+				<div class="row gx-3">
+					<div class="col-6 mb-3 mt-3">
+						<!-- <label for="sex" class="form-label">Sex</label> -->
+						<select class="form-select" id="status" name="status" required aria-label="select example">
+						  <option value="">New Status</option>
+						  <option value="ACTIVE">ACTIVE</option>
+						  <option value="CANCELLED">CANCELLED</option>
+						  <option value="LAPSED">LAPSED</option>
+						</select>
+						<div class="invalid-feedback">Please select a valid Status</div>
+					</div>
+					<div class="col-6">
+						<button class="btn btn-primary mb-3 mt-3 col-12" role="button" type="submit">Edit Status</button>
+					</div>
+				</div>
+			</form>
 			
 		</main>
 			
