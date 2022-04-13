@@ -16,7 +16,7 @@ CREATE TABLE CUSTOMER (
     FName			varchar(25) not null,
     MName			varchar(25) not null,
     LName			varchar(25) not null,
-    Addr_Line		varchar(50) not null,
+    Addr_Line		varchar(250) not null,
     Province		varchar(25) not null,
     Country			varchar(25) not null,
     Phone_No		varchar(25) not null,
@@ -36,7 +36,7 @@ CREATE TABLE CLAIM (
     Accident_Date		datetime not null,
     Status			varchar(25) not null,
     Type			varchar(25) not null,
-    location		varchar(25) not null
+    location		varchar(250) not null
 );
 
 DROP TABLE IF EXISTS POLICY;
@@ -179,7 +179,7 @@ CREATE TABLE NOTE (
 	PolicyNo		int not null,
 	Note_Title		varchar(25) not null,
     Date			datetime not null,
-    Text			varchar(100) not null,
+    Text			varchar(500) not null,
     ManagerID		int not null,
 	primary key (PolicyNo, Date),
     foreign key(PolicyNo) references POLICY(PolicyNo),

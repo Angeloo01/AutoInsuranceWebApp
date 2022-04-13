@@ -7,7 +7,7 @@
   <meta name="description" content="">
   <meta name="author" content="Edited by Angelo Gonzales.">
 
-  <title>View Claims</title>
+  <title>View Policies</title>
 
 
 
@@ -41,36 +41,34 @@
   
   <main class="container-lg">
     <div class="row">
-      <h2 class="col-sm-8 h2 mb-3 mt-3 fw-bold" align="left">Claims</h2>
+      <h2 class="col-sm-8 h2 mb-3 mt-3 fw-bold" align="left">Policies</h2>
       <!-- <h2 class="col-sm-4 h2 mb-3 mt-3 fw-bold" align="right">Claims</h2> -->
       <div class="col-sm-4 mb-3 mt-3" align="right">
-        <a class="btn btn-primary" href="/manager/fileClaim" role="button">File Claim</a>
+        <a class="btn btn-primary" href="/" role="button">Back</a>
       </div>
     </div>
 
     <table class="table table-hover">
       <thead>
         <tr>
-          <th scope="col">#</th>
           <th scope="col">Policy #</th>
-          <th scope="col">Type</th>
-          <th scope="col">Location</th>
-          <th scope="col">Date</th>
+          <th scope="col">Customer #</th>
+          <th scope="col">Customer Name</th>
+          <th scope="col">EffectiveDate</th>
           <th scope="col">Status</th>
         </tr>
       </thead>
       <tbody>
-        <% for(const c of claims) {%>
-          <% if(c.Status === 'PENDING') {%>
-        <tr class='clickable-row' data-href='/manager/claims/<%= c.ClaimID %>/<%= c.PolicyNo %>'>
-          <th scope="row"><%= c.ClaimID %></th>
-          <td><%= c.PolicyNo %></td>
-          <td><%= c.Type %></td>
-          <td><%= c.location %></td>
-          <td><%= c.Accident_Date.split("T")[0] %></td>
+        <% for(const c of policies) {%>
+
+        <tr class='clickable-row' data-href='/manager/policies/<%= c.PolicyNo %>'>
+          <th scope="row"><%= c.PolicyNo %></th>
+          <td><%= c.CustomerNo %></td>
+          <td><%= c.FName %> <%= c.LName %></td>
+          <td><%= c.EffectiveDate.split("T")[0] %></td>
           <td><%= c.Status %></td>
         </tr>
-          <% } %>
+
         <% } %>
 
       </tbody>

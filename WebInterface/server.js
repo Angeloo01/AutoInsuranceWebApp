@@ -209,8 +209,8 @@ app.get('/claims', authCustomer, async (req, res) => {
                 claims.push(claim);
             }
         };
-
-        //console.log(claims);
+        // console.log(policies);
+        // console.log(claims);
 
         res.render('customerClaimView', { claims });
     }
@@ -241,6 +241,8 @@ app.get('/claims/:ClaimID', authCustomer, async (req, res) => {
         response = await fetch(apiURL + '/api/vehicle/' + `${claim.VIN}`);
         //convert response to json
         const vehicle = await response.json();
+
+        //console.log({...(customer[0]), ...claim, vehicle});
 
         //get fetch
         response = await fetch(apiURL + '/api/driver/' + `${claim.License_No}/${claim.License_Prov}/${claim.License_Date.split('T')[0]}`);
@@ -317,7 +319,7 @@ app.post('/customer/fileClaim', authManagerOrCustomer, async (req, res) => {
     try {
         var response = await fetch(apiURL + '/api/claim', {
             method: 'post',
-            body: JSON.stringify({ accident_date: req.body.accident_date, status: 'under review', type: req.body.type, location: req.body.location }),
+            body: JSON.stringify({ accident_date: req.body.accident_date, status: 'PENDING', type: req.body.type, location: req.body.location }),
             headers: { 'Content-Type': 'application/json' }
         });
 
@@ -587,6 +589,103 @@ app.post('/customer/editInformation', async (req, res) => {
     }
     catch {
 
+    }
+});
+
+//manager policies view
+app.get('/manager/policies', authManager, async (req, res) => {
+    try {
+        //get fetch
+        var response = await fetch(apiURL + '/api/policy/all');
+        const policies = await response.json();
+
+        //console.log(policies);
+        res.render('Policies/ManagerViewAllPolicies', {policies});
+        
+    }
+    catch (error) {
+        console.log(error);
+        res.status(400).redirect('/');
+    }
+});
+
+//manager specific policy view
+app.get('/manager/policies/:PolicyNo', authManager, async (req, res) => {
+    try {
+        //get fetch
+        var response = await fetch(apiURL + `/api/policy/view?policyno=${req.params.PolicyNo}`);
+        const policy = (await response.json())[0];
+
+        //console.log(policies);
+        res.render('Policies/managerViewPolicy', {...policy});
+        
+    }
+    catch (error) {
+        console.log(error);
+        res.status(400).redirect('/');
+    }
+});
+
+//manager view notes
+app.get('/manager/policies/notes/:PolicyNo', authManager, async (req, res) => {
+    try {
+        //get fetch
+        var response = await fetch(apiURL + `/api/note?policyno=${req.params.PolicyNo}`);
+        const notes = await response.json();
+
+        //console.log(notes);
+        res.render('Notes/ViewNotes', {PolicyNo: req.params.PolicyNo, notes});
+        
+    }
+    catch (error) {
+        console.log(error);
+        res.status(400).redirect('/');
+    }
+});
+
+//add note manager
+app.get('/manager/policies/newNote/:PolicyNo', authManager, async (req, res) => {
+    try {
+        //get fetch
+        // var response = await fetch(apiURL + `/api/note?policyno=${req.params.PolicyNo}`);
+        // const notes = await response.json();
+
+        //console.log(notes);
+        res.render('Notes/NewNote', {PolicyNo: req.params.PolicyNo});
+        
+    }
+    catch (error) {
+        console.log(error);
+        res.status(400).redirect('/');
+    }
+});
+
+//add note manager
+app.post('/manager/policies/newNote/:PolicyNo', authManager, async (req, res) => {
+    try {
+        //post fetch
+        //req.body.policyno, req.body.note_title, req.body.date, req.body.text, req.body.ManagerID
+        var date;
+        date = new Date();
+        date = date.getUTCFullYear() + '-' +
+            ('00' + (date.getUTCMonth()+1)).slice(-2) + '-' +
+            ('00' + date.getUTCDate()).slice(-2) + ' ' + 
+            ('00' + date.getUTCHours()).slice(-2) + ':' + 
+            ('00' + date.getUTCMinutes()).slice(-2) + ':' + 
+            ('00' + date.getUTCSeconds()).slice(-2);
+        var response = await fetch((apiURL + '/api/note'), {
+            method: 'post', //make methid = put since the api endpoint is a POST request
+            body: JSON.stringify({policyno: req.params.PolicyNo, note_title: req.body.Title, date: date, text: req.body.Text, ManagerID: req.session.ManagerID}), //everything is already in correct order from form, so just json.stringify the entire request
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        //console.log(req.body);
+        res.redirect(`/manager/policies/notes/${req.params.PolicyNo}`);
+        
+    }
+    catch (error) {
+        console.log(error);
+        res.status(400).redirect('/');
     }
 });
 

@@ -8,8 +8,8 @@ app.use(express.json());
 var connection = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "hello12345",
-    //password: "sql_password",
+    //password: "hello12345",
+    password: "sql_password",
     database: "auto_insurance"
 });
 
@@ -154,6 +154,20 @@ app.get('/api/policy/list', (req, res) => {
             res.json(results);
         });
 })
+
+//GET Method to list all policies
+app.get('/api/policy/all', (req, res) => {
+    connection.query('SELECT policy.PolicyNo, policy.EffectiveDate, policy.CustomerNo, customer.FName, customer.LName, policy.Status FROM policy JOIN customer ON (policy.CustomerNo = customer.CustomerNo)',
+        (error, results, fields) => {
+            if (error) {
+                res.status(500).send();
+                console.log(error);
+                return;
+            }
+            res.json(results);
+        });
+})
+
 //GET Method to view claim information
 app.get('/api/claim/view', (req, res) => {
     connection.query('SELECT * FROM claim LEFT JOIN related_to USING (ClaimID) LEFT JOIN involved_in_driver USING(ClaimID) LEFT JOIN involved_in_vehicle USING(ClaimID) WHERE ClaimID = ?',
@@ -329,7 +343,7 @@ app.put('/api/vehicle', (req, res) => {
 
 //GET endpoint for selecting tuples from vehicle table
 app.get('/api/vehicle', (req, res) => {
-    connection.query('SELECT vehicle.VIN, Year, Make FROM vehicle LEFT JOIN involved_in_vehicle ON (vehicle.VIN = involved_in_vehicle.VIN) WHERE PolicyNo = ? OR ClaimID = ? GROUP BY (VIN)',
+    connection.query('SELECT vehicle.VIN, Year, Make FROM vehicle LEFT JOIN involved_in_vehicle ON (vehicle.VIN = involved_in_vehicle.VIN) LEFT JOIN insd_under ON (vehicle.VIN = insd_under.VIN) WHERE PolicyNo = ? OR ClaimID = ? GROUP BY (VIN)',
         [req.query.PolicyNo, req.query.Claim_ID],
         (error, results, fields) => {
             if (error) {
@@ -489,6 +503,7 @@ app.get('/api/note', (req, res) => {
 
 //POST method for a manager to add a note to a policy
 app.post('/api/note', (req, res) => {
+    console.log(req.body);
     connection.query('INSERT INTO note (PolicyNo, Note_Title, Date, Text, ManagerID) VALUES (?,?,?,?,?)',
         [req.body.policyno, req.body.note_title, req.body.date, req.body.text, req.body.ManagerID],
         (error, results, fields) => {
