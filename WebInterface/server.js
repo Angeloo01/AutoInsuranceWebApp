@@ -4,7 +4,7 @@ const app = express();
 const path = require('path');
 const session = require('express-session');
 const fetch = require('node-fetch');
-const { readdirSync } = require('fs');
+const { readdirSync, copyFileSync } = require('fs');
 const { response } = require('express');
 
 //Setting up view engine.
@@ -587,8 +587,8 @@ app.post('/customer/editInformation', async (req, res) => {
         });
         res.redirect('/customer/information'); //redirect back to information page to view changes
     }
-    catch {
-
+    catch (error) {
+        console.log(error);
     }
 });
 
@@ -600,8 +600,8 @@ app.get('/manager/policies', authManager, async (req, res) => {
         const policies = await response.json();
 
         //console.log(policies);
-        res.render('Policies/ManagerViewAllPolicies', {policies});
-        
+        res.render('Policies/ManagerViewAllPolicies', { policies });
+
     }
     catch (error) {
         console.log(error);
@@ -617,8 +617,8 @@ app.get('/manager/policies/:PolicyNo', authManager, async (req, res) => {
         const policy = (await response.json())[0];
 
         //console.log(policies);
-        res.render('Policies/managerViewPolicy', {...policy});
-        
+        res.render('Policies/managerViewPolicy', { ...policy });
+
     }
     catch (error) {
         console.log(error);
@@ -634,8 +634,8 @@ app.get('/manager/policies/notes/:PolicyNo', authManager, async (req, res) => {
         const notes = await response.json();
 
         //console.log(notes);
-        res.render('Notes/ViewNotes', {PolicyNo: req.params.PolicyNo, notes});
-        
+        res.render('Notes/ViewNotes', { PolicyNo: req.params.PolicyNo, notes });
+
     }
     catch (error) {
         console.log(error);
@@ -651,8 +651,8 @@ app.get('/manager/policies/newNote/:PolicyNo', authManager, async (req, res) => 
         // const notes = await response.json();
 
         //console.log(notes);
-        res.render('Notes/NewNote', {PolicyNo: req.params.PolicyNo});
-        
+        res.render('Notes/NewNote', { PolicyNo: req.params.PolicyNo });
+
     }
     catch (error) {
         console.log(error);
@@ -668,27 +668,59 @@ app.post('/manager/policies/newNote/:PolicyNo', authManager, async (req, res) =>
         var date;
         date = new Date();
         date = date.getUTCFullYear() + '-' +
-            ('00' + (date.getUTCMonth()+1)).slice(-2) + '-' +
-            ('00' + date.getUTCDate()).slice(-2) + ' ' + 
-            ('00' + date.getUTCHours()).slice(-2) + ':' + 
-            ('00' + date.getUTCMinutes()).slice(-2) + ':' + 
+            ('00' + (date.getUTCMonth() + 1)).slice(-2) + '-' +
+            ('00' + date.getUTCDate()).slice(-2) + ' ' +
+            ('00' + date.getUTCHours()).slice(-2) + ':' +
+            ('00' + date.getUTCMinutes()).slice(-2) + ':' +
             ('00' + date.getUTCSeconds()).slice(-2);
         var response = await fetch((apiURL + '/api/note'), {
             method: 'post', //make methid = put since the api endpoint is a POST request
-            body: JSON.stringify({policyno: req.params.PolicyNo, note_title: req.body.Title, date: date, text: req.body.Text, ManagerID: req.session.ManagerID}), //everything is already in correct order from form, so just json.stringify the entire request
+            body: JSON.stringify({ policyno: req.params.PolicyNo, note_title: req.body.Title, date: date, text: req.body.Text, ManagerID: req.session.ManagerID }), //everything is already in correct order from form, so just json.stringify the entire request
             headers: { 'Content-Type': 'application/json' }
         });
 
         //console.log(req.body);
         res.redirect(`/manager/policies/notes/${req.params.PolicyNo}`);
-        
+
     }
     catch (error) {
         console.log(error);
         res.status(400).redirect('/');
     }
 });
-
+app.get('/customer/newPolicy', authCustomer, async (req, res) => {
+    try {
+        res.render('Customer Menus/CustomerPolicyRequest', { 'email': req.session.email });
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+app.post('/customer/newPolicy', authCustomer, async (req, res) => {
+    try {
+        //fetch the url, and pass in customer number as a url parameter
+        var response = await fetch((apiURL + '/api/policy' + `?customerno=${req.session.CustomerNo}`), {
+            method: 'post',
+            body: JSON.stringify({ deductible: req.body.Deductible, edate: req.body.Date, status: "PENDING", premium: req.body.Premium }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+        res.redirect('/'); //redirect back to information page to view changes
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+app.get('/customer/PolicyPage/:PolicyNo', authCustomer, async (req, res) => {
+    try {
+        const response = await fetch(apiURL + '/api/policy/view' + `?policyno=${req.params.PolicyNo}`);
+        //convert response to json
+        const information = await response.json();
+        res.render('Policies/PolicyPage', { 'email': req.session.email, information });
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
 app.listen(8080, () => {
     console.log("Listening on port 8080")
 });

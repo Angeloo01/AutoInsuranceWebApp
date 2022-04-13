@@ -8,8 +8,8 @@ app.use(express.json());
 var connection = mysql.createConnection({
     host: "localhost",
     user: "root",
-    //password: "hello12345",
-    password: "sql_password",
+    password: "hello12345",
+    //password: "sql_password",
     database: "auto_insurance"
 });
 
@@ -118,7 +118,7 @@ app.get('/api/policy', (req, res) => {
 //POST Method to create new policy
 app.post('/api/policy', (req, res) => {
     connection.query('INSERT INTO policy (Deductible, EffectiveDate, Status, Premium, CustomerNo) VALUES (?,?,?,?,?)',
-        [req.body.deductible, req.body.edate, req.body.status, req.body.premium, req.body.customerno],
+        [req.body.deductible, req.body.edate, req.body.status, req.body.premium, req.query.customerno],
         (error, results, fields) => {
             if (error) {
                 res.status(500).send();
