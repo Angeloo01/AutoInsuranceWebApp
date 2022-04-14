@@ -42,9 +42,9 @@
         </div>
     </nav>
     <% const v=information %>
-        <h1 class=" display-3" style="text-align:center; padding-top:40px; padding-bottom:60px;"> Vehicle
+        <h4 style="text-align:center; padding-top:40px; padding-bottom:60px;"> Vehicle
             Information
-        </h1>
+        </h4>
         <div class="container-fluid">
             <div class="table-responsive">
 
@@ -86,6 +86,43 @@
                             <%= v.Driving_record %>
                         </td>
                     </tr>
+                </table>
+
+            </div>
+        </div>
+        <h4 style="text-align:center; padding-top:40px; padding-bottom:60px;"> Drivers
+        </h4>
+        <div class="container-fluid">
+            <div class="table-responsive">
+
+                <table class="table">
+                    <tr>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">License Number</th>
+                        <th scope="col">Relationship</th>
+                        <th scope="col">Grid Rating</th>
+                    </tr>
+                    </thead>
+                    <% for (const d of drivers) {%>
+                        <tr>
+                            <td>
+                                <%= d.FName %>
+                            </td>
+                            <td>
+                                <%= d.LName %>
+                            </td>
+                            <td>
+                                <%= d.License_No %>
+                            </td>
+                            <td>
+                                <%= d.Relationship %>
+                            </td>
+                            <td>
+                                <%= d.Grid_Rating %>
+                            </td>
+                        </tr>
+                        <% } %>
                 </table>
 
             </div>

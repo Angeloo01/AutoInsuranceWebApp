@@ -286,6 +286,7 @@ app.get('/customer/fileClaim', authCustomer, async (req, res) => {
             var response2 = await fetch(apiURL + '/api/driver' + `?PolicyNo=${curr.PolicyNo}&ClaimID=`);
             const drvs = await response2.json();
             for (const d of drvs) {
+                console.log("YO");
                 drivers.push(d);
             }
 
@@ -799,7 +800,7 @@ app.get('/customer/vehicles/:PolicyNo', authCustomer, async (req, res) => {
         console.log(error);
     }
 });
-app.get('/customer/viewVehicle/:VIN', authCustomer, async (req, res) => {
+app.get('/customer/viewVehicle/:VIN/:PolicyNo', authCustomer, async (req, res) => {
     try {
         var response = await fetch(apiURL + `/api/vehicle/${req.params.VIN}`);
 
@@ -809,8 +810,20 @@ app.get('/customer/viewVehicle/:VIN', authCustomer, async (req, res) => {
         //convert response to json
         const policy = await response.json();
 
+        response = await fetch(apiURL + '/api/driver/drives');
+        const drives = await response.json();
 
-        res.render('VehiclesAndDrivers/vehicleInfoPage', { 'email': req.session.email, information, policy });
+        var drivers = new Array();
+        var response2 = await fetch(apiURL + '/api/driver' + `?PolicyNo=${req.params.PolicyNo}&ClaimID=`);
+        const drvs = await response2.json();
+        for (const d of drvs) {
+            for (const dr of drives) {
+                if ((d.License_No === dr.License_No) && (dr.VIN === information.VIN)) {
+                    drivers.push(d);
+                }
+            }
+        }
+        res.render('VehiclesAndDrivers/vehicleInfoPage', { 'email': req.session.email, information, policy, drivers });
     }
     catch (error) {
         console.log(error);

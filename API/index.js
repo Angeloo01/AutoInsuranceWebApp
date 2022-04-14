@@ -502,7 +502,18 @@ app.post('/api/payment', (req, res) => {
             res.status(201).send();
         });
 });
-
+//GET Method to get drives table
+app.get('/api/driver/drives', (req, res) => {
+    connection.query('SELECT * FROM drives',
+        (error, results, fields) => {
+            if (error) {
+                res.status(500).send();
+                console.log(error);
+                return;
+            }
+            res.json(results);
+        });
+})
 //GET method for listing all notes on a policy
 app.get('/api/note', (req, res) => {
     connection.query("SELECT Note_Title, Date, Text, ManagerID FROM note WHERE PolicyNo = ?",
