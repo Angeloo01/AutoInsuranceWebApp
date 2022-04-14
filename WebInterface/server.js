@@ -785,6 +785,7 @@ app.get('/customer/payments', authCustomer, async (req, res) => {
         res.status(400).redirect('/');
     }
 });
+//To get all the vehicles under a driver's policy from a customer
 app.get('/customer/vehicles/:PolicyNo', authCustomer, async (req, res) => {
     try {
         var response = await fetch(apiURL + '/api/policy/view' + `?policyno=${req.params.PolicyNo}`);
@@ -800,6 +801,7 @@ app.get('/customer/vehicles/:PolicyNo', authCustomer, async (req, res) => {
         console.log(error);
     }
 });
+//To get the vehicles information, and all the drivers for a specific vehicle by a customer
 app.get('/customer/viewVehicle/:VIN/:PolicyNo', authCustomer, async (req, res) => {
     try {
         var response = await fetch(apiURL + `/api/vehicle/${req.params.VIN}`);
@@ -829,6 +831,7 @@ app.get('/customer/viewVehicle/:VIN/:PolicyNo', authCustomer, async (req, res) =
         console.log(error);
     }
 });
+//get request to the form for adding a vehicle to a policy by a customer
 app.get('/customer/addVehicle/:PolicyNo', authCustomer, async (req, res) => {
     try {
         let policyNo = req.params.PolicyNo;
@@ -838,6 +841,7 @@ app.get('/customer/addVehicle/:PolicyNo', authCustomer, async (req, res) => {
         console.log(error);
     }
 });
+//Post request to register a vehicle to a policy from the customer
 app.post('/customer/addVehicle/:PolicyNo', authCustomer, async (req, res) => {
     let pNo = req.params.PolicyNo;
     try {
@@ -864,6 +868,7 @@ app.post('/customer/addVehicle/:PolicyNo', authCustomer, async (req, res) => {
         console.log(error);
     }
 });
+//Get request to get the add driver form by a customer
 app.get('/customer/vehicle/addDriver/:VIN/:PolicyNo', authCustomer, async (req, res) => {
     try {
         let VIN = req.params.VIN;
@@ -874,6 +879,7 @@ app.get('/customer/vehicle/addDriver/:VIN/:PolicyNo', authCustomer, async (req, 
         console.log(error);
     }
 });
+//post request to add a vehicle to a policy by a customer, adds to all 3 tables
 app.post('/customer/vehicle/addVehicle/:VIN/:PolicyNo', authCustomer, async (req, res) => {
     let VIN = req.params.VIN;
     let pNo = req.params.PolicyNo;
