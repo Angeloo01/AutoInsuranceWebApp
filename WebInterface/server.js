@@ -14,6 +14,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static('views/Customer Menus'));
 app.use(express.static('views/customer sign up'));
 app.use(express.static('views/Policies'));
+app.use(express.static('views/VehiclesAndDrivers'));
 app.use(express.urlencoded({ extended: true })); //to parse HTML form data (aka read HTML form data)
 app.use(express.static(path.join(__dirname, '/public')));
 app.use(express.json());
@@ -752,7 +753,7 @@ app.get('/customer/pinkcard/:PolicyNo', authCustomer, async (req, res) => {
 
         response = await fetch(apiURL + '/api/vehicle' + `?PolicyNo=${req.params.PolicyNo}&ClaimID=`);
         const vehicles = await response.json();
-        
+
         res.render('PinkCard/ViewPinkCard', { ...policy, vehicles });
     }
     catch (error) {
@@ -768,14 +769,14 @@ app.get('/customer/payments', authCustomer, async (req, res) => {
         var response = await fetch(apiURL + '/api/policy/list' + `?customerno=${req.session.CustomerNo}`);
         //convert response to json
         var policies = await response.json();
-        
-        for(p of policies){
+
+        for (p of policies) {
             response = await fetch(apiURL + '/api/payment' + `?policyno=${p.PolicyNo}`);
             //convert response to json
             p.payments = await response.json();
         }
         //console.log(policies);
-        res.render('Payments/ViewPayments', {policies});
+        res.render('Payments/ViewPayments', { policies });
         return;
     }
     catch (error) {
@@ -783,7 +784,73 @@ app.get('/customer/payments', authCustomer, async (req, res) => {
         res.status(400).redirect('/');
     }
 });
+app.get('/customer/vehicles/:PolicyNo', authCustomer, async (req, res) => {
+    try {
+        var response = await fetch(apiURL + '/api/policy/view' + `?policyno=${req.params.PolicyNo}`);
+        //convert response to json
+        const policy = await response.json();
 
+        response = await fetch(apiURL + '/api/vehicle' + `?PolicyNo=${req.params.PolicyNo}&ClaimID=`);
+        const vehicles = await response.json();
+
+        res.render('VehiclesAndDrivers/vehicleHomePage.ejs', { 'email': req.session.email, policy, vehicles });
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+app.get('/customer/viewVehicle/:VIN', authCustomer, async (req, res) => {
+    try {
+        var response = await fetch(apiURL + `/api/vehicle/${req.params.VIN}`);
+
+        const information = await response.json();
+
+        response = await fetch(apiURL + '/api/policy/view' + `?policyno=${req.params.PolicyNo}`);
+        //convert response to json
+        const policy = await response.json();
+
+
+        res.render('VehiclesAndDrivers/vehicleInfoPage', { 'email': req.session.email, information, policy });
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+app.get('/customer/addVehicle/:PolicyNo', authCustomer, async (req, res) => {
+    try {
+        let policyNo = req.params.PolicyNo;
+        res.render('VehiclesAndDrivers/registerVehiclePage', { 'email': req.session.email, policyNo });
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+app.post('/customer/addVehicle/:PolicyNo', authCustomer, async (req, res) => {
+    pNo = req.params.PolicyNo;
+    try {
+        var response = await fetch((apiURL + '/api/vehicle'), {
+            method: 'post',
+            body: JSON.stringify({
+                VIN: req.body.VIN, year: req.body.Year, make: req.body.Make, model: req.body.Model, uses: req.body.Usage, km: req.body.kmperyr,
+                lease_status: req.body.LeaseStatus, driving_record: req.body.DrivingRecord
+            }),
+            headers: { 'Content-Type': 'application/json' }
+
+        });
+        var response = await fetch((apiURL + '/api/insd_under'), {
+            method: 'post',
+            body: JSON.stringify({
+                VIN: req.body.VIN, policyno: pNo
+            }),
+            headers: { 'Content-Type': 'application/json' }
+
+        });
+        res.redirect(`/customer/vehicles/${pNo}`);
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
 app.listen(8080, () => {
     console.log("Listening on port 8080")
 });

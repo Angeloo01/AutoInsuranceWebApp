@@ -1,17 +1,19 @@
 .dropdown-menu {
-    position: static;
-    display: block;
-    width: auto;
-    margin: 2rem auto;
-  }
-  .dropdown-menu-macos {
-    text-align:center;
-    display: grid;
-    gap: .50rem;
-    padding: .5rem;
-    border-radius: .75rem;
-  }
-  .dropdown-menu-macos .dropdown-item {
-    border-radius: .35rem;
-    padding:0.75rem;
-  }
+  position: static;
+  display: block;
+  width: auto;
+  margin: 2rem auto;
+}
+
+.dropdown-menu-macos {
+  text-align: center;
+  display: grid;
+  gap: .50rem;
+  padding: .5rem;
+  border-radius: .75rem;
+}
+
+.dropdown-menu-macos .dropdown-item {
+  border-radius: .35rem;
+  padding: 0.75rem;
+}

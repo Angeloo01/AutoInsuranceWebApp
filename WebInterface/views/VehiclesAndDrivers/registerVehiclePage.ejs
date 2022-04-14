@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>New Vehicle Form</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand mb-0 h1" href="/">EasyAutoInsurance</a>
+            <span class="navbar-text" style="float:left;">
+                Logged in as <%= email %>
+            </span>
+            <a class="btn btn-primary" href="/logout" role="Logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container-fluid" style="max-width:900px;">
+        <div class=text-center>
+            <% for (p of policyNo) { %>
+                <% } %>
+                    <h4 class="mb-3" style="margin-top:30px; padding-bottom:40px;">Add a New Vehicle To Policy <%= p %>
+                    </h4>
+        </div>
+        <form class="needs-validation" action="/customer/addVehicle/<%= p %>" method="post">
+            <div class="row">
+                <div class="col-6">
+                    <div class="col-12">
+                        <label for=" VIN" class="form-label">Vehicle VIN</label>
+                        <input type="text" class="form-control" id="VIN" name="VIN" placeholder="" value="" required>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="col-12">
+                        <label for="Make" class="form-label">Make</label>
+                        <input type="text" class="form-control" id="Make" name="Make" placeholder="" value="" required>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="col-12">
+                        <label for="Model" class="form-label">Model</label>
+                        <input type="text" class="form-control" id="Model" name="Model" placeholder="" value=""
+                            required>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="col-12">
+                        <label for="Year" class="form-label">Year</label>
+                        <input type="Number" class="form-control" id="Year" name="Year" placeholder="" value=""
+                            required>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <label for="Usage" class="form-label">Usage</label>
+                    <select class="form-select" id="Usage" name="Usage" required>
+                        <option value="">Choose...</option>
+                        <option>Personal Vehicle</option>
+                        <option>Business Vehicle</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <div class="col-12">
+                        <label for="km/yr" class="form-label">Km/yr</label>
+                        <input type="text" class="form-control" id="kmperyr" name="kmperyr" placeholder="" value=""
+                            required>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="col-12">
+                        <label for="Lease-Status" class="form-label">Lease Status</label>
+                        <select class="form-select" id="LeaseStatus" name="LeaseStatus" required>
+                            <option value="">Choose...</option>
+                            <option>Leased</option>
+                            <option>Owned</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="col-12">
+                        <label for="Driving-Record" class="form-label">Driving Record</label>
+                        <input type="text" class="form-control" id="DrivingRecord" name="DrivingRecord" placeholder=""
+                            value="" required>
+                    </div>
+                </div>
+
+                <button class="w-100 btn btn-primary btn-md" type="submit" style="padding: 10px; margin-top:20px;">Add
+                    Vehicle</button>
+                <a class="w-100 btn btn-danger btn-md" style="margin-top:20px;" href="/customer/vehicles/<%= p %>">Go
+                    Back</a>
+
+            </div>
+        </form>
+    </div>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous">
+        </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

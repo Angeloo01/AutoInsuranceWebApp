@@ -8,8 +8,8 @@ app.use(express.json());
 var connection = mysql.createConnection({
     host: "localhost",
     user: "root",
-    //password: "hello12345",
-    password: "sql_password",
+    password: "hello12345",
+    //password: "sql_password",
     database: "auto_insurance"
 });
 
@@ -331,8 +331,8 @@ app.get('/api/vehicle/:vin', (req, res) => {
 
 //POST endpoint for creating a tuple in vehicle table
 app.post('/api/vehicle', (req, res) => {
-    connection.query('INSERT INTO vehicle (VIN, Year, Make, Uses, Km_per_yr, Lease_status, Driving_record, PolicyNo) VALUES (?,?,?,?,?,?,?,?);',
-        [req.body.VIN, req.body.year, req.body.make, req.body.uses, req.body.km, req.body.lease_status, req.body.driving_record, req.body.PolicyNo],
+    connection.query('INSERT INTO vehicle (VIN, Year, Make, Model, Uses, Km_per_yr, Lease_status, Driving_record) VALUES (?,?,?,?,?,?,?,?);',
+        [req.body.VIN, req.body.year, req.body.make, req.body.model, req.body.uses, req.body.km, req.body.lease_status, req.body.driving_record],
         (error, results, fields) => {
             if (error) {
                 res.status(500).send();
@@ -559,7 +559,18 @@ app.post('/api/conviction', (req, res) => {
             res.status(201).send();
         });
 });
-
+app.post('/api/insd_under', (req, res) => {
+    connection.query('INSERT INTO insd_under (VIN, PolicyNo) VALUES (?,?)',
+        [req.body.VIN, req.body.policyno],
+        (error, results, fields) => {
+            if (error) {
+                res.status(500).send();
+                console.log(error);
+                return;
+            }
+            res.status(201).send();
+        });
+});
 app.listen(3000, () => {
     console.log("Listening on port 3000")
 });

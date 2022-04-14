@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Info Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+
+<style>
+    .dropdown-menu {
+        position: static;
+        display: block;
+        width: auto;
+        margin: 5rem auto;
+    }
+
+    .dropdown-menu-macos {
+        text-align: center;
+        display: grid;
+        gap: .50rem;
+        padding: .5rem;
+        border-radius: .75rem;
+    }
+
+    .dropdown-menu-macos .dropdown-item {
+        border-radius: .35rem;
+    }
+</style>
+
+<body>
+    <nav class="navbar navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand mb-0 h1" href="/">EasyAutoInsurance</a>
+            <span class="navbar-text" style="float:left;">
+                Logged in as <%= email %>
+            </span>
+            <a class="btn btn-primary" href="/logout" role="Logout">Logout</a>
+        </div>
+    </nav>
+    <% const v=information %>
+        <h1 class=" display-3" style="text-align:center; padding-top:40px; padding-bottom:60px;"> Vehicle
+            Information
+        </h1>
+        <div class="container-fluid">
+            <div class="table-responsive">
+
+                <table class="table">
+                    <tr>
+                        <th scope="col">VIN</th>
+                        <th scope="col">Year</th>
+                        <th scope="col">Make</th>
+                        <th scope="col">Model</th>
+                        <th scope="col">Uses</th>
+                        <th scope="col">Km_per_yr</th>
+                        <th scope="col">Lease_status</th>
+                        <th scope="col">Driving_record</th>
+                    </tr>
+                    </thead>
+                    <tr>
+                        <td>
+                            <%= v.VIN %>
+                        </td>
+                        <td>
+                            <%= v.Year %>
+                        </td>
+                        <td>
+                            <%= v.Make %>
+                        </td>
+                        <td>
+                            <%= v.Model %>
+                        </td>
+                        <td>
+                            <%= v.Uses %>
+                        </td>
+                        <td>
+                            <%= v.Km_per_yr %>
+                        </td>
+                        <td>
+                            <%= v.Lease_status %>
+                        </td>
+                        <td>
+                            <%= v.Driving_record %>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+        <div class=" row">
+            <div class="col-12">
+                <% for (p of policy) { %>
+                    <% } %>
+                        <div class="d-flex gap-5 justify-content-center" id="dropdownMacos">
+                            <a class="btn btn-primary mb-3 mt-3 col-4" href="#">Edit Vehicle Information</a>
+                        </div>
+                        <div class="d-flex gap-5 justify-content-center" id="dropdownMacos">
+                            <a class="btn btn-primary mb-3 mt-3 col-4" href="#">Add Driver(s)</a>
+                        </div>
+                        <div class="d-flex gap-5 justify-content-center" id="dropdownMacos">
+                            <a class="btn btn-danger mb-3 mt-3 col-4" href="/customer/vehicles/<%= p.PolicyNo %>">Go
+                                Back</a>
+                        </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+            integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous">
+            </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+            integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+            crossorigin="anonymous"></script>
+</body>
+
+</html>

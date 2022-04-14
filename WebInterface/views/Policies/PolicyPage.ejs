@@ -71,25 +71,22 @@
             </div>
 
             <hr />
-            <div class="row gx-3">
+            <div class="row">
                 <div class="col-4">
-                    <a class="btn btn-primary mb-3 mt-3 col-12" role="button" href="/customer/pinkcard/<%= i.PolicyNo %>">View Pink Card</a>
+                    <a class="btn btn-primary mb-3 mt-3 col-12" role="button"
+                        href="/customer/pinkcard/<%= i.PolicyNo %>">View Pink Card</a>
+                </div>
+                <div class="col-4">
+                    <a class="btn btn-primary mb-3 mt-3 col-12" role="button"
+                        href="/customer/vehicles/<%= i.PolicyNo %>">Edit
+                        Vehicles and Drivers</a>
+                </div>
+                <div class="col-4">
+                    <a class="btn btn-primary mb-3 mt-3 col-12" role="button">Make A Payment</a>
                 </div>
             </div>
-
-            <a class="btn btn-danger mb-3 mt-3 col-12" href="/">Return To Home</a>
             <% } %>
-                <div class="row gx-3">
-                    <div class="col-4">
-                        <button class="btn btn-primary mb-3 mt-3 col-12" role="button">Edit Vehicles</button>
-                    </div>
-                    <div class="col-4">
-                        <button class="btn btn-primary mb-3 mt-3 col-12" role="button">Edit Drivers</button>
-                    </div>
-                    <div class="col-4">
-                        <button class="btn btn-primary mb-3 mt-3 col-12" role="button">Add a Note</button>
-                    </div>
-                </div>
+                <a class="btn btn-danger mb-3 mt-3 col-12" href="/customer/listPolicies">Go Back</a>
     </main>
     <script>
         // Example starter JavaScript for disabling form submissions if there are invalid fields
