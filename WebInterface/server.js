@@ -839,7 +839,7 @@ app.get('/customer/addVehicle/:PolicyNo', authCustomer, async (req, res) => {
     }
 });
 app.post('/customer/addVehicle/:PolicyNo', authCustomer, async (req, res) => {
-    pNo = req.params.PolicyNo;
+    let pNo = req.params.PolicyNo;
     try {
         var response = await fetch((apiURL + '/api/vehicle'), {
             method: 'post',
@@ -857,6 +857,49 @@ app.post('/customer/addVehicle/:PolicyNo', authCustomer, async (req, res) => {
             }),
             headers: { 'Content-Type': 'application/json' }
 
+        });
+        res.redirect(`/customer/viewVehicle/${VIN}/${pNo}`);
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+app.get('/customer/vehicle/addDriver/:VIN/:PolicyNo', authCustomer, async (req, res) => {
+    try {
+        let VIN = req.params.VIN;
+        let pNo = req.params.PolicyNo;
+        res.render('VehiclesAndDrivers/NewDriverPage', { 'email': req.session.email, VIN, pNo });
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+app.post('/customer/vehicle/addVehicle/:VIN/:PolicyNo', authCustomer, async (req, res) => {
+    let VIN = req.params.VIN;
+    let pNo = req.params.PolicyNo;
+    try {
+        var response = await fetch((apiURL + '/api/driver'), {
+            method: 'post',
+            body: JSON.stringify({
+                license_date: req.body.LicenseDate, license_no: req.body.LicenseNumber, license_prov: req.body.licenseProv, fname: req.body.fName, mname: req.body.mName, lname: req.body.lName,
+                training: req.body.Training, sex: req.body.sex, birth_date: req.body.bDate, grid_rating: req.body.GridRating, license_class: req.body.LicenseClass
+            }),
+            headers: { 'Content-Type': 'application/json' }
+
+        });
+        var response = await fetch((apiURL + '/api/driver/drives'), {
+            method: 'post',
+            body: JSON.stringify({
+                licensedate: req.body.LicenseDate, licenseno: req.body.LicenseNumber, licenseprov: req.body.licenseProv, vin: VIN, po: req.body.po
+            }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+        var response = await fetch((apiURL + '/api/driver/driverfor'), {
+            method: 'post',
+            body: JSON.stringify({
+                licensedate: req.body.LicenseDate, licenseno: req.body.LicenseNumber, licenseprov: req.body.licenseProv, pno: pNo, relationship: req.body.relationship
+            }),
+            headers: { 'Content-Type': 'application/json' }
         });
         res.redirect(`/customer/vehicles/${pNo}`);
     }

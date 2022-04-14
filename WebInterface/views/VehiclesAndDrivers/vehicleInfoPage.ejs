@@ -102,6 +102,7 @@
                         <th scope="col">License Number</th>
                         <th scope="col">Relationship</th>
                         <th scope="col">Grid Rating</th>
+                        <th scope="col"></th>
                     </tr>
                     </thead>
                     <% for (const d of drivers) {%>
@@ -121,6 +122,9 @@
                             <td>
                                 <%= d.Grid_Rating %>
                             </td>
+                            <td>
+                                <a class="btn btn-secondary" href="#">Update This Driver</a>
+                            </td>
                         </tr>
                         <% } %>
                 </table>
@@ -135,7 +139,9 @@
                             <a class="btn btn-primary mb-3 mt-3 col-4" href="#">Edit Vehicle Information</a>
                         </div>
                         <div class="d-flex gap-5 justify-content-center" id="dropdownMacos">
-                            <a class="btn btn-primary mb-3 mt-3 col-4" href="#">Add Driver(s)</a>
+                            <a class="btn btn-primary mb-3 mt-3 col-4"
+                                href="/customer/vehicle/addDriver/<%= v.VIN %>/<%= p.PolicyNo %>">Add
+                                Driver(s)</a>
                         </div>
                         <div class="d-flex gap-5 justify-content-center" id="dropdownMacos">
                             <a class="btn btn-danger mb-3 mt-3 col-4" href="/customer/vehicles/<%= p.PolicyNo %>">Go

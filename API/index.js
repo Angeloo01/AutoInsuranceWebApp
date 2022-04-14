@@ -502,7 +502,7 @@ app.post('/api/payment', (req, res) => {
             res.status(201).send();
         });
 });
-//GET Method to get drives table
+//GET Method to get drives table 
 app.get('/api/driver/drives', (req, res) => {
     connection.query('SELECT * FROM drives',
         (error, results, fields) => {
@@ -514,6 +514,31 @@ app.get('/api/driver/drives', (req, res) => {
             res.json(results);
         });
 })
+//POST method to add a driver to a specific vehicle
+app.post('/api/driver/drives', (req, res) => {
+    connection.query('INSERT INTO drives (License_Date, License_No, License_Prov, VIN, P_O_Operator) VALUES (?,?,?,?,?)',
+        [req.body.licensedate, req.body.licenseno, req.body.licenseprov, req.body.vin, req.body.po],
+        (error, results, fields) => {
+            if (error) {
+                res.status(500).send();
+                console.log(error);
+                return;
+            }
+            res.status(201).send();
+        });
+})
+app.post('/api/driver/driverfor', (req, res) => {
+    connection.query('INSERT INTO driver_for (License_Date, License_No, License_Prov, PolicyNo, Relationship) VALUES (?,?,?,?,?)',
+        [req.body.licensedate, req.body.licenseno, req.body.licenseprov, req.body.pno, req.body.relationship],
+        (error, results, fields) => {
+            if (error) {
+                res.status(500).send();
+                console.log(error);
+                return;
+            }
+            res.status(201).send();
+        });
+});
 //GET method for listing all notes on a policy
 app.get('/api/note', (req, res) => {
     connection.query("SELECT Note_Title, Date, Text, ManagerID FROM note WHERE PolicyNo = ?",
