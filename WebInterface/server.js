@@ -618,8 +618,21 @@ app.get('/manager/policies/:PolicyNo', authManager, async (req, res) => {
         var response = await fetch(apiURL + `/api/policy/view?policyno=${req.params.PolicyNo}`);
         const policy = (await response.json())[0];
 
+        response = await fetch(apiURL + '/api/driver' + `?PolicyNo=${req.params.PolicyNo}&ClaimID=`);
+        const drivers = await response.json();
+
+        response = await fetch(apiURL + '/api/vehicle' + `?PolicyNo=${req.params.PolicyNo}&ClaimID=`);
+        const vehicles = await response.json();
+
+        for(d of drivers){
+            //req.query.license_date, req.query.license_no, req.query.license_prov
+            response = await fetch(apiURL + '/api/conviction' + `?license_date=${d.License_Date.split('T')[0]}&license_no=${d.License_No}&license_prov=${d.License_Prov}`);
+            d.convictions = await response.json();
+        }
+        //console.log({ ...policy, drivers, vehicles });
+
         //console.log(policies);
-        res.render('Policies/managerViewPolicy', { ...policy });
+        res.render('Policies/managerViewPolicy', { ...policy, drivers, vehicles });
 
     }
     catch (error) {
@@ -635,6 +648,29 @@ app.post('/manager/policies/:PolicyNo', authManager, async (req, res) => {
         var response = await fetch((apiURL + `/api/policy/${req.params.PolicyNo}`), {
             method: 'patch', //
             body: JSON.stringify({ deductible: req.body.deductible, edate: req.body.edate, status: req.body.status, premium: req.body.premium }), //
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        //console.log(policies);
+        res.redirect(`/manager/policies/${req.params.PolicyNo}`);
+
+    }
+    catch (error) {
+        console.log(error);
+        res.status(400).redirect('/');
+    }
+});
+
+//manager add conviction to policy post
+app.post('/manager/policies/:PolicyNo/conviction', authManager, async (req, res) => {
+    req.body.driver = JSON.parse(req.body.driver);
+    console.log(req.body);
+    try {
+        var response = await fetch((apiURL + `/api/conviction`), {
+            method: 'post', //
+            //req.body.license_date, req.body.license_no, req.body.license_prov, req.body.date, req.body.degree
+            body: JSON.stringify({ license_date: req.body.driver.License_Date.split('T')[0], license_no: req.body.driver.License_No, 
+                license_prov: req.body.driver.License_Prov, date: req.body.date, degree: req.body.degree }), //
             headers: { 'Content-Type': 'application/json' }
         });
 

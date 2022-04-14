@@ -8,8 +8,8 @@ app.use(express.json());
 var connection = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "hello12345",
-    //password: "sql_password",
+    //password: "hello12345",
+    password: "sql_password",
     database: "auto_insurance"
 });
 
@@ -359,7 +359,7 @@ app.put('/api/vehicle', (req, res) => {
 
 //GET endpoint for selecting tuples from vehicle table
 app.get('/api/vehicle', (req, res) => {
-    connection.query('SELECT vehicle.VIN, Year, Make, Model FROM vehicle LEFT JOIN involved_in_vehicle ON (vehicle.VIN = involved_in_vehicle.VIN) LEFT JOIN insd_under ON (vehicle.VIN = insd_under.VIN) WHERE PolicyNo = ? OR ClaimID = ? GROUP BY (VIN)',
+    connection.query('SELECT vehicle.VIN, Year, Make, Model, Km_per_yr FROM vehicle LEFT JOIN involved_in_vehicle ON (vehicle.VIN = involved_in_vehicle.VIN) LEFT JOIN insd_under ON (vehicle.VIN = insd_under.VIN) WHERE PolicyNo = ? OR ClaimID = ? GROUP BY (VIN)',
         [req.query.PolicyNo, req.query.Claim_ID],
         (error, results, fields) => {
             if (error) {
@@ -437,7 +437,7 @@ app.put('/api/driver', (req, res) => {
 //GET method for listing all drivers on a policy or involved in a claim
 //Endpoint has been changed from blueprint, now also returns F/T party and % at fault or relationship as appropriate
 app.get('/api/driver', (req, res) => {
-    connection.query("SELECT d.License_No, d.FName, d.LName, df.Relationship, d.Grid_Rating FROM driver AS d, driver_for as df WHERE df.PolicyNo = ? AND d.License_No = df.License_No AND d.License_Date = df.License_Date AND d.License_Prov = df.License_Prov UNION SELECT d.License_No, d.FName, d.LName, iid.F_T_Party, iid.Percent_At_Fault FROM driver AS d, involved_in_driver AS iid WHERE iid.ClaimID = ? AND d.License_No = iid.License_No AND d.License_Date = iid.License_Date AND d.License_Prov = iid.License_Prov",
+    connection.query("SELECT d.License_No, d.License_Date, d.License_Prov, d.FName, d.LName, df.Relationship, d.Grid_Rating FROM driver AS d, driver_for as df WHERE df.PolicyNo = ? AND d.License_No = df.License_No AND d.License_Date = df.License_Date AND d.License_Prov = df.License_Prov UNION SELECT d.License_No, d.License_Date, d.License_Prov, d.FName, d.LName, iid.F_T_Party, iid.Percent_At_Fault FROM driver AS d, involved_in_driver AS iid WHERE iid.ClaimID = ? AND d.License_No = iid.License_No AND d.License_Date = iid.License_Date AND d.License_Prov = iid.License_Prov",
         [req.query.PolicyNo, req.query.ClaimID],
         (error, results, fields) => {
             if (error) {
