@@ -42,10 +42,10 @@ CREATE TABLE CLAIM (
 DROP TABLE IF EXISTS POLICY;
 CREATE TABLE POLICY (
 	PolicyNo 	int not null auto_increment primary key,
-    Deductible	int not null,
+    Deductible	int DEFAULT(0),
     EffectiveDate date not null,
     Status 		varchar(25) not null,
-    Premium		int not null,
+    Premium		int DEFAULT(0),
     CustomerNo  int not null,
     foreign key (CustomerNo) references CUSTOMER(CustomerNo)
 );

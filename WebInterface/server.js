@@ -627,13 +627,13 @@ app.get('/manager/policies/:PolicyNo', authManager, async (req, res) => {
     }
 });
 
-//manager update policy status post
+//manager update policy post
 app.post('/manager/policies/:PolicyNo', authManager, async (req, res) => {
     //console.log(req.body);
     try {
         var response = await fetch((apiURL + `/api/policy/${req.params.PolicyNo}`), {
             method: 'patch', //
-            body: JSON.stringify({ Status: req.body.status }), //
+            body: JSON.stringify({ deductible: req.body.deductible, edate: req.body.edate, status: req.body.status, premium: req.body.premium }), //
             headers: { 'Content-Type': 'application/json' }
         });
 
@@ -722,7 +722,7 @@ app.post('/customer/newPolicy', authCustomer, async (req, res) => {
         //fetch the url, and pass in customer number as a url parameter
         var response = await fetch((apiURL + '/api/policy' + `?customerno=${req.session.CustomerNo}`), {
             method: 'post',
-            body: JSON.stringify({ deductible: req.body.Deductible, edate: req.body.Date, status: "PENDING", premium: req.body.Premium }),
+            body: JSON.stringify({ deductible: req.body.Deductible, edate: req.body.Date, status: "PENDING MANAGER REVIEW", premium: req.body.Premium }),
             headers: { 'Content-Type': 'application/json' }
         });
         res.redirect('/'); //redirect back to information page to view changes

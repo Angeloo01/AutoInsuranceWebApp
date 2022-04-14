@@ -115,10 +115,10 @@ app.get('/api/policy', (req, res) => {
             res.json(results);
         });
 })
-//POST Method to create new policy
+//POST Method to create new policy request
 app.post('/api/policy', (req, res) => {
-    connection.query('INSERT INTO policy (Deductible, EffectiveDate, Status, Premium, CustomerNo) VALUES (?,?,?,?,?)',
-        [req.body.deductible, req.body.edate, req.body.status, req.body.premium, req.query.customerno],
+    connection.query('INSERT INTO policy (EffectiveDate, Status, CustomerNo) VALUES (?,?,?)',
+        [req.body.edate, req.body.status, req.query.customerno],
         (error, results, fields) => {
             if (error) {
                 res.status(500).send();
@@ -145,8 +145,8 @@ app.get('/api/policy/view', (req, res) => {
 //PATCH Method to update a policy
 app.patch('/api/policy/:PolicyNo', (req, res) => {
     //console.log([req.body.Status, req.params.PolicyNo]);
-    connection.query('UPDATE policy SET Status = ? WHERE PolicyNo = ?',
-        [req.body.Status, req.params.PolicyNo],
+    connection.query('UPDATE policy SET Deductible = ?, EffectiveDate = ?, Status = ?, Premium = ? WHERE PolicyNo = ?',
+        [req.body.deductible, req.body.edate, req.body.status, req.body.premium, req.params.PolicyNo],
         (error, results, fields) => {
             if (error) {
                 res.status(500).send();
