@@ -1,5 +1,5 @@
 # AutoInsuranceWebApp
-Welcome to our readme for the CPSC471 final project. We are group 7: Mohamed Yassin, Angelo Gonzales, Adam Hiles.
+Welcome to our readme for the CPSC471 final project code directory. We are group 7: Mohamed Yassin, Angelo Gonzales, Adam Hiles.
 
 We have 3 directories: API,DataGen,Dummy Website, WebInterface.
 
