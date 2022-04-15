@@ -136,7 +136,9 @@
                 <% for (p of policy) { %>
                     <% } %>
                         <div class="d-flex gap-5 justify-content-center" id="dropdownMacos">
-                            <a class="btn btn-primary mb-3 mt-3 col-4" href="#">Edit Vehicle Information</a>
+                            <a class="btn btn-primary mb-3 mt-3 col-4"
+                                href="/vehicle/updateVehicle/<%= v.VIN %>/<%= p.PolicyNo %>">Edit Vehicle
+                                Information</a>
                         </div>
                         <div class="d-flex gap-5 justify-content-center" id="dropdownMacos">
                             <a class="btn btn-primary mb-3 mt-3 col-4"

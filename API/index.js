@@ -8,8 +8,8 @@ app.use(express.json());
 var connection = mysql.createConnection({
     host: "localhost",
     user: "root",
-    //password: "hello12345",
-    password: "sql_password",
+    password: "hello12345",
+    //password: "sql_password",
     database: "auto_insurance"
 });
 
@@ -345,8 +345,8 @@ app.post('/api/vehicle', (req, res) => {
 
 //PUT endpoint for updating a tuple in vehicle table
 app.put('/api/vehicle', (req, res) => {
-    connection.query('UPDATE vehicle SET Year = ?, Make = ?, Uses = ?, Km_per_yr = ?, Lease_status = ?, Driving_record = ?, PolicyNo = ? WHERE VIN = ?',
-        [req.body.year, req.body.make, req.body.uses, req.body.km, req.body.lease_status, req.body.driving_record, req.body.PolicyNo, req.body.VIN],
+    connection.query('UPDATE vehicle SET Year = ?, Make = ?, Uses = ?, Km_per_yr = ?, Lease_status = ?, Driving_record = ? WHERE VIN = ?',
+        [req.body.year, req.body.make, req.body.uses, req.body.km, req.body.lease_status, req.body.driving_record, req.body.VIN],
         (error, results, fields) => {
             if (error) {
                 res.status(500).send();

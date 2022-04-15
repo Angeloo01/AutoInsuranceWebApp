@@ -624,7 +624,7 @@ app.get('/manager/policies/:PolicyNo', authManager, async (req, res) => {
         response = await fetch(apiURL + '/api/vehicle' + `?PolicyNo=${req.params.PolicyNo}&ClaimID=`);
         const vehicles = await response.json();
 
-        for(d of drivers){
+        for (d of drivers) {
             //req.query.license_date, req.query.license_no, req.query.license_prov
             response = await fetch(apiURL + '/api/conviction' + `?license_date=${d.License_Date.split('T')[0]}&license_no=${d.License_No}&license_prov=${d.License_Prov}`);
             d.convictions = await response.json();
@@ -669,8 +669,10 @@ app.post('/manager/policies/:PolicyNo/conviction', authManager, async (req, res)
         var response = await fetch((apiURL + `/api/conviction`), {
             method: 'post', //
             //req.body.license_date, req.body.license_no, req.body.license_prov, req.body.date, req.body.degree
-            body: JSON.stringify({ license_date: req.body.driver.License_Date.split('T')[0], license_no: req.body.driver.License_No, 
-                license_prov: req.body.driver.License_Prov, date: req.body.date, degree: req.body.degree }), //
+            body: JSON.stringify({
+                license_date: req.body.driver.License_Date.split('T')[0], license_no: req.body.driver.License_No,
+                license_prov: req.body.driver.License_Prov, date: req.body.date, degree: req.body.degree
+            }), //
             headers: { 'Content-Type': 'application/json' }
         });
 
@@ -944,6 +946,40 @@ app.post('/customer/vehicle/addVehicle/:VIN/:PolicyNo', authCustomer, async (req
             headers: { 'Content-Type': 'application/json' }
         });
         res.redirect(`/customer/vehicles/${pNo}`);
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+//get method to get edit vehicle form
+app.get('/vehicle/updateVehicle/:VIN/:PolicyNo', authManagerOrCustomer, async (req, res) => {
+    let vin = req.params.VIN;
+    let pNo = req.params.PolicyNo;
+    try {
+        var response = await fetch(apiURL + `/api/vehicle/${vin}`);
+
+        const information = await response.json();
+
+        res.render(`VehiclesAndDrivers/EditVehicleForm`, { 'email': req.session.email, information, vin, pNo });
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+//post method that sends a put request to the patch api to edit a vehicle's info, this will be shared by the customer and manager
+app.post('/vehicle/updateVehicle/:VIN/:PolicyNo', authManagerOrCustomer, async (req, res) => {
+    let vin = req.params.VIN;
+    let pNo = req.params.PolicyNo;
+    try {
+        var response = await fetch((apiURL + '/api/vehicle'), {
+            method: 'put',
+            body: JSON.stringify({
+                year: req.body.year, make: req.body.make, uses: req.body.uses, km: req.body.km, lease_status: req.body.lease,
+                driving_record: req.body.drivingrecord, VIN: vin
+            }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+        res.redirect(`/vehicle/updateVehicle/${vin}/${pNo}`);
     }
     catch (error) {
         console.log(error);
