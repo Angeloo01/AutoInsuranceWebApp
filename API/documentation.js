@@ -8,4 +8,4 @@ http.createServer(app).listen(5000)
 console.log("Listening at:// port:%s (HTTP)", 5000)
 
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
-app.use(require('./index.js'))
+//app.use(require('./index.js'))
