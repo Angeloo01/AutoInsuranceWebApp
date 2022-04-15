@@ -15,5 +15,6 @@ To run the web interface (the website used to access the api):
 2. Navigate to the WebInterface directory, and run the "npm install" command in the terminal. This should install all the dependencies needed.
 3. Run the interface with "node server.js".
 4. Open localhost:8080 on Chrome and start exploring the web app.
+5. To clarify, you need two terminals to do this.
 
 To Generate lots of Data for the MySQL database so you can test it. Read the readme in DataGen.
