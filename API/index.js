@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
 const bcrypt = require('bcrypt');
+const cors = require('cors');
 var mysql = require('mysql');
+app.use(cors());
 
 app.use(express.json());
 
@@ -19,8 +21,8 @@ connection.connect(function (err) {
 });
 
 app.post('/api/customer/login', async (req, res) => {
-    let sql = `SELECT password, CustomerNo FROM customer WHERE Email = '${req.body.email}'`;
-    connection.query(sql, function (error, results, fields) {
+    let sql = `SELECT password, CustomerNo FROM customer WHERE Email = ?`;
+    connection.query(sql, [req.body.email], function (error, results, fields) {
         //console.log(results);
         if (results[0] && req.body.password === results[0].password) {
             res.json({ 'CustomerNo': results[0].CustomerNo });
@@ -88,8 +90,10 @@ app.get('/api/customer/viewInformation', (req, res) => {
 app.post('/api/customer', async (req, res) => {
     try {
         //const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        var sql = `INSERT INTO customer (Fname, MName, LName, Addr_Line, Province, Country, Phone_No, Email, Sex, Birth_Date, Password, Transit_No, Institute_No, Acct_No) VALUES ('${req.body.firstName}', '${req.body.middleName}', '${req.body.lastName}', '${req.body.address}', '${req.body.province}', '${req.body.country}', '${req.body.phone}', '${req.body.email}', '${req.body.sex}', '${req.body.birthday}', '${req.body.password}', '${req.body.transitno}', '${req.body.instno}', '${req.body.acctno}')`;
-        connection.query(sql, function (err, result) {
+        var sql = `INSERT INTO customer (Fname, MName, LName, Addr_Line, Province, Country, Phone_No, Email, Sex, Birth_Date, Password, Transit_No, Institute_No, Acct_No) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+        connection.query(sql, [req.body.firstName, req.body.middleName, req.body.lastName, req.body.address, req.body.province, req.body.country,
+            req.body.phone, req.body.email, req.body.sex, req.body.birthday, req.body.password, req.body.transitno, req.body.instno, 
+            req.body.acctno], function (err, result) {
             if (err) {
                 res.status(500).send();
                 console.log(err);
@@ -607,6 +611,8 @@ app.post('/api/insd_under', (req, res) => {
             res.status(201).send();
         });
 });
+
+module.exports = app;
 app.listen(3000, () => {
     console.log("Listening on port 3000")
 });
