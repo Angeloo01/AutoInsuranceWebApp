@@ -1,0 +1,1205 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "REST API",
+    "description": ""
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/api/customer/login": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/customer": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "fname",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "lname",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "addr",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "prov",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "phone",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "bdate",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "customerno",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                },
+                "phone": {
+                  "example": "any"
+                },
+                "sex": {
+                  "example": "any"
+                },
+                "address": {
+                  "example": "any"
+                },
+                "country": {
+                  "example": "any"
+                },
+                "province": {
+                  "example": "any"
+                },
+                "transitno": {
+                  "example": "any"
+                },
+                "instno": {
+                  "example": "any"
+                },
+                "acctno": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "firstName": {
+                  "example": "any"
+                },
+                "middleName": {
+                  "example": "any"
+                },
+                "lastName": {
+                  "example": "any"
+                },
+                "address": {
+                  "example": "any"
+                },
+                "province": {
+                  "example": "any"
+                },
+                "country": {
+                  "example": "any"
+                },
+                "phone": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "sex": {
+                  "example": "any"
+                },
+                "birthday": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                },
+                "transitno": {
+                  "example": "any"
+                },
+                "instno": {
+                  "example": "any"
+                },
+                "acctno": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/customer/viewInformation": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "customerno",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/policy": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "fname",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "lname",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "edate",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "customerno",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "edate": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/policy/view": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "policyno",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/policy/{PolicyNo}": {
+      "patch": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "PolicyNo",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "deductible": {
+                  "example": "any"
+                },
+                "edate": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                },
+                "premium": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/policy/list": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "customerno",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/policy/all": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/claim/view": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "claimno",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/claim": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accident_date": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                },
+                "type": {
+                  "example": "any"
+                },
+                "location": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "patch": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Status": {
+                  "example": "any"
+                },
+                "Claim_ID": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "driver": {
+                  "example": "any"
+                },
+                "PolicyNo": {
+                  "example": "any"
+                },
+                "Claim_ID": {
+                  "example": "any"
+                },
+                "VIN": {
+                  "example": "any"
+                },
+                "accident_date": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                },
+                "type": {
+                  "example": "any"
+                },
+                "location": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "PolicyNo",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/vehicle/{vin}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "vin",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/vehicle": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "VIN": {
+                  "example": "any"
+                },
+                "year": {
+                  "example": "any"
+                },
+                "make": {
+                  "example": "any"
+                },
+                "model": {
+                  "example": "any"
+                },
+                "uses": {
+                  "example": "any"
+                },
+                "km": {
+                  "example": "any"
+                },
+                "lease_status": {
+                  "example": "any"
+                },
+                "driving_record": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "year": {
+                  "example": "any"
+                },
+                "make": {
+                  "example": "any"
+                },
+                "uses": {
+                  "example": "any"
+                },
+                "km": {
+                  "example": "any"
+                },
+                "lease_status": {
+                  "example": "any"
+                },
+                "driving_record": {
+                  "example": "any"
+                },
+                "PolicyNo": {
+                  "example": "any"
+                },
+                "VIN": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "PolicyNo",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "Claim_ID",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/driver/{licNo}/{licProv}/{licDate}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "licNo",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "licProv",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "licDate",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/driver": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "license_date": {
+                  "example": "any"
+                },
+                "license_no": {
+                  "example": "any"
+                },
+                "license_prov": {
+                  "example": "any"
+                },
+                "fname": {
+                  "example": "any"
+                },
+                "mname": {
+                  "example": "any"
+                },
+                "lname": {
+                  "example": "any"
+                },
+                "training": {
+                  "example": "any"
+                },
+                "sex": {
+                  "example": "any"
+                },
+                "birth_date": {
+                  "example": "any"
+                },
+                "grid_rating": {
+                  "example": "any"
+                },
+                "license_class": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "license_date": {
+                  "example": "any"
+                },
+                "license_no": {
+                  "example": "any"
+                },
+                "license_prov": {
+                  "example": "any"
+                },
+                "fname": {
+                  "example": "any"
+                },
+                "mname": {
+                  "example": "any"
+                },
+                "lname": {
+                  "example": "any"
+                },
+                "training": {
+                  "example": "any"
+                },
+                "sex": {
+                  "example": "any"
+                },
+                "birth_date": {
+                  "example": "any"
+                },
+                "grid_rating": {
+                  "example": "any"
+                },
+                "license_class": {
+                  "example": "any"
+                },
+                "id_license_date": {
+                  "example": "any"
+                },
+                "id_license_no": {
+                  "example": "any"
+                },
+                "id_license_prov": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "PolicyNo",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "ClaimID",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/manager": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/manager/login": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/payment": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "policyno",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "policyno": {
+                  "example": "any"
+                },
+                "transactionid": {
+                  "example": "any"
+                },
+                "amount": {
+                  "example": "any"
+                },
+                "date": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/driver/drives": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "licensedate": {
+                  "example": "any"
+                },
+                "licenseno": {
+                  "example": "any"
+                },
+                "licenseprov": {
+                  "example": "any"
+                },
+                "vin": {
+                  "example": "any"
+                },
+                "po": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/driver/driverfor": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "licensedate": {
+                  "example": "any"
+                },
+                "licenseno": {
+                  "example": "any"
+                },
+                "licenseprov": {
+                  "example": "any"
+                },
+                "pno": {
+                  "example": "any"
+                },
+                "relationship": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/note": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "policyno",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "policyno": {
+                  "example": "any"
+                },
+                "note_title": {
+                  "example": "any"
+                },
+                "date": {
+                  "example": "any"
+                },
+                "text": {
+                  "example": "any"
+                },
+                "ManagerID": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/conviction": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "license_date",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "license_no",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "license_prov",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "license_date": {
+                  "example": "any"
+                },
+                "license_no": {
+                  "example": "any"
+                },
+                "license_prov": {
+                  "example": "any"
+                },
+                "date": {
+                  "example": "any"
+                },
+                "degree": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/insd_under": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "VIN": {
+                  "example": "any"
+                },
+                "policyno": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  }
+}
