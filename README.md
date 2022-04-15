@@ -2,6 +2,7 @@
 Welcome to our readme for the CPSC471 final project code directory. We are group 7: Mohamed Yassin, Angelo Gonzales, Adam Hiles.
 
 We have 3 directories: API,DataGen,Dummy Website, WebInterface.
+Download the zip file and extract it.
 
 To run the API:
 1. Install node.js
