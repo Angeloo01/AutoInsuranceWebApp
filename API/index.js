@@ -10,8 +10,8 @@ app.use(express.json());
 var connection = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "hello12345",
-    //password: "sql_password",
+    //password: "hello12345",
+    password: "sql_password",
     database: "auto_insurance"
 });
 
@@ -177,13 +177,14 @@ app.get('/api/policy/list', (req, res) => {
 
 //GET Method to list all policies
 app.get('/api/policy/all', (req, res) => {
-    connection.query('SELECT policy.PolicyNo, policy.EffectiveDate, policy.CustomerNo, customer.FName, customer.LName, policy.Status FROM policy JOIN customer ON (policy.CustomerNo = customer.CustomerNo)',
+    connection.query('SELECT policy.PolicyNo, policy.EffectiveDate, policy.CustomerNo, customer.FName, customer.LName, policy.Status FROM policy LEFT JOIN customer ON (policy.CustomerNo = customer.CustomerNo)',
         (error, results, fields) => {
             if (error) {
                 res.status(500).send();
                 console.log(error);
                 return;
             }
+            //console.log(results);
             res.json(results);
         });
 })

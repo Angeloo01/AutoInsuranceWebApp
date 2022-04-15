@@ -23,12 +23,11 @@
 
     <div class="container-fluid" style="max-width:900px;">
         <div class=text-center>
-            <% for (p of policyNo) { %>
-                <% } %>
-                    <h4 class="mb-3" style="margin-top:30px; padding-bottom:40px;">Add a New Vehicle To Policy <%= p %>
+            
+                    <h4 class="mb-3" style="margin-top:30px; padding-bottom:40px;">Add a New Vehicle To Policy <%= policyNo %>
                     </h4>
         </div>
-        <form class="needs-validation" action="/customer/addVehicle/<%= p %>" method="post">
+        <form class="needs-validation" action="/customer/addVehicle/<%= policyNo %>" method="post">
             <div class="row">
                 <div class="col-6">
                     <div class="col-12">
@@ -91,7 +90,7 @@
 
                 <button class="w-100 btn btn-primary btn-md" type="submit" style="padding: 10px; margin-top:20px;">Add
                     Vehicle</button>
-                <a class="w-100 btn btn-danger btn-md" style="margin-top:20px;" href="/customer/vehicles/<%= p %>">Go
+                <a class="w-100 btn btn-danger btn-md" style="margin-top:20px;" href="/customer/vehicles/<%= policyNo %>">Go
                     Back</a>
 
             </div>

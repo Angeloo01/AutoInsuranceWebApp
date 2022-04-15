@@ -639,9 +639,6 @@
                 "driving_record": {
                   "example": "any"
                 },
-                "PolicyNo": {
-                  "example": "any"
-                },
                 "VIN": {
                   "example": "any"
                 }

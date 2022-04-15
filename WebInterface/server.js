@@ -900,7 +900,7 @@ app.post('/customer/addVehicle/:PolicyNo', authCustomer, async (req, res) => {
             headers: { 'Content-Type': 'application/json' }
 
         });
-        res.redirect(`/customer/viewVehicle/${VIN}/${pNo}`);
+        res.redirect(`/customer/viewVehicle/${req.body.VIN}/${pNo}`);
     }
     catch (error) {
         console.log(error);
