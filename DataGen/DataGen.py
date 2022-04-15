@@ -1,6 +1,5 @@
-#Creates an SQL file for populating the insurance database with random data
-#ver 1: customer table
-#WARNING: Intended for an empty database, assumes autoincrement ids from 0
+#Creates an SQL file for populating the insurance database autoinsurance.sql with random data
+#WARNING: Intended for an empty database, assumes autoincrement ids startnig at 1
 
 from sys import *
 from random import *
