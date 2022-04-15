@@ -123,7 +123,9 @@
                                 <%= d.Grid_Rating %>
                             </td>
                             <td>
-                                <a class="btn btn-secondary" href="#">Update This Driver</a>
+                                <a class="btn btn-secondary"
+                                    href="/driver/updateDriver/<%= d.License_No %>/<%=d.License_Prov %>/<%= d.License_Date.substring(0,10)%>">Update
+                                    This Driver</a>
                             </td>
                         </tr>
                         <% } %>

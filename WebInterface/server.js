@@ -985,6 +985,39 @@ app.post('/vehicle/updateVehicle/:VIN/:PolicyNo', authManagerOrCustomer, async (
         console.log(error);
     }
 });
+app.get('/driver/updateDriver/:licNo/:licProv/:licDate', authCustomer, async (req, res) => {
+    let licNo = req.params.licNo;
+    let licProv = req.params.licProv;
+    let licDate = req.params.licDate;
+    try {
+        var response = await fetch(apiURL + `/api/driver/${licNo}/${licProv}/${licDate}`);
+
+        const information = await response.json();
+
+        res.render(`VehiclesAndDrivers/EditDriverForm`, { 'email': req.session.email, information, licNo, licProv, licDate });
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+//post method that sends a put request to the patch api to edit a vehicle's info, this will be shared by the customer and manager
+app.post('/driver/updateDriver/:licNo/:licProv/:licDate', authCustomer, async (req, res) => {
+    try {
+        var response = await fetch((apiURL + '/api/driver'), {
+            method: 'put',
+            body: JSON.stringify({
+                license_date: req.body.LicenseDate, license_no: req.body.LicenseNumber, license_prov: req.body.licenseProv, fname: req.body.fName, mname: req.body.mName,
+                lname: req.body.lName, training: req.body.Training, sex: req.body.sex, birth_date: req.body.bDate, grid_rating: req.body.GridRating,
+                license_class: req.body.LicenseClass, id_license_date: req.params.licDate, id_license_no: req.params.licNo, id_license_prov: req.params.licProv
+            }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+        res.redirect(`/driver/updateDriver/${req.params.licNo}/${req.params.licProv}/${req.params.licDate}`);
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
 app.listen(8080, () => {
     console.log("Listening on port 8080")
 });
